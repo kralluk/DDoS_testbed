@@ -1,0 +1,12 @@
+version: "3"
+services:
+  bot1:
+    image: ubuntu
+    restart: on-failure
+    command: ["sleep","infinity"]
+    networks:
+      botnet:
+networks:
+  botnet:
+    ipam:
+      driver: default
