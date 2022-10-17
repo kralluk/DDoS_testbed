@@ -30,7 +30,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/krall/DDoS_testbed/webappv2/venv"
+set -gx VIRTUAL_ENV "/home/krall/more/DDoS_testbed/webappv2/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
