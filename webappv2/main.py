@@ -29,6 +29,13 @@ def server():
     #     print("Victim already existst")
     return("nothing")
 
+@app.route('add_attacker')
+def add_attacker():
+    client = docker.from_env()
+    i = 0
+    client.containers.run(image='httpd', name="dev"+str(i), network="testbed")
+    return("nothing")
+
 
 if __name__ == '__main__':
     app.run()

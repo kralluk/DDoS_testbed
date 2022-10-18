@@ -15,4 +15,11 @@ $(document).ready(function(){
                 console.log(data)
         });
       });
+    $('#add').on('click', function(e) {
+        e.preventDefault()
+        $.getJSON('/server',
+            function(data) {
+                console.log(data)
+        });
+      });
 });
