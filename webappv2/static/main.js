@@ -15,9 +15,16 @@ $(document).ready(function(){
                 console.log(data)
         });
       });
-    $('#add').on('click', function(e) {
+    $('#add_attacker').on('click', function(e) {
         e.preventDefault()
-        $.getJSON('/server',
+        $.getJSON('/add_attacker',
+            function(data) {
+                console.log(data)
+        });
+      });
+    $('#remove_attacker').on('click', function(e) {
+        e.preventDefault()
+        $.getJSON('/remove_attacker',
             function(data) {
                 console.log(data)
         });
