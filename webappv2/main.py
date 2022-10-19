@@ -32,18 +32,22 @@ def server():
     #     print("Victim already existst")
     return("nothing")
 
-@app.route('/generate')
-def generate():
+@app.route('/info')
+def info():
     print(i)
     return("nothing")
 
 @app.route('/add_attacker')
 def add_attacker():
-    global i
-    i += 1
-    attacker_name = 'att'+str(i)
+    # global i
+    # i += 1
+    # attacker_name = 'att'+str(i)
     client = docker.from_env()
-    client.containers.run("ubuntu:latest", "sleep infinity", name={attacker_name}, network="testbed")
+    try:    
+        container = client.containers.run("ubuntu:latest", "sleep infinity", network="testbed", detach=True)
+        print(container.id)
+    except docker.errors.APIErorr as ex:
+        print("Container wasnt generated")
     return("nothing")
 
 @app.route('/remove_attacker')

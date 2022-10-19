@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
-    $('#generate').on('click', function(e) {
+    $('#info').on('click', function(e) {
         e.preventDefault()
-        $.getJSON('/generate',
+        $.getJSON('/info',
             function(data) {
                 console.log(data)
         });
