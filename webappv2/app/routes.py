@@ -1,8 +1,7 @@
-from flask import Flask
 from flask import render_template
 import docker, os
+from app import app
 
-app = Flask(__name__)
 
 @app.route('/')
 def index():
@@ -59,7 +58,3 @@ def remove_attacker():
             print("Error")
     os.remove("attackers.txt")
     return("nothing")
-
-
-if __name__ == '__main__':
-    app.run()
