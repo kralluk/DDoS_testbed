@@ -1,12 +1,12 @@
 $(document).ready(function(){
 
-    $('#info').on('click', function(e) {
-        e.preventDefault()
-        $.getJSON('/info',
-            function(data) {
-                console.log(data)
-        });
-      });
+    // $('#info').on('click', function(e) {
+    //     e.preventDefault()
+    //     $.getJSON('/info',
+    //         function(data) {
+    //             console.log(data)
+    //     });
+    //   });
 
     $('#server').on('click', function(e) {
         e.preventDefault()
