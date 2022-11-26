@@ -7,12 +7,20 @@
         <title>Ovladani botnetu</title>
     </head>
 <body>
-</script>
-
     <button id="server">server</button>
     <button id="add_attacker">Pridat utocnika</button>
     <button id="remove_attacker">Odebrat utocniky</button>
     <!-- <button id=info>Info</button> -->
     
-</body>
+        {% for bot in bots %}
+        <tr>
+                <td>{{bot['id']}}</td>
+            <td>{{bot['container_id']}}</td>
+        </tr>
+        {% endfor%}
+
+        <form action="show_botnet">
+            <input type="submit" value="Ukaz botnet" name="action1"/>
+        </form>
+    </body>
 </html>

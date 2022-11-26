@@ -1,12 +1,15 @@
-from flask import render_template
-import docker, os
-from app import app
+from typing import Container
+from flask import render_template, request
+import docker, os, sqlite3
+from app import app, db
 
+
+@app.before_first_request
+def create_db():
+    db.create_db()
 
 @app.route('/')
 def index():
-    # attacker_name = 'att'+str(i)
-    # print(attacker_name)
     return render_template('index.html')
 
 @app.route('/server')
@@ -25,36 +28,37 @@ def server():
         client.containers.run(image='httpd', name="victim", network="testbed", ports={'80/tcp':80})
     return("nothing")
 
-# @app.route('/info')
-# def info():
-#     print(i)
-#     return("nothing")
-
-@app.route('/add_attacker')
+@app.route('/add_attacker',methods = ['POST', 'GET'])
 def add_attacker():
     client = docker.from_env()
     try:
         container = client.containers.run("ubuntu:latest", "sleep infinity", network="testbed", detach=True)
-        print(container.id)
-        file = open("attackers.txt", "a")
-        file.write(container.id+",")
-        file.close()
+        db.bot_insert(container.id)
     except docker.errors.APIErorr as ex:
         print("Container was not generated")
-    return("nothing")
+    return ("nothing")
 
 @app.route('/remove_attacker')
 def remove_attacker():
+    conn = db.connect_db()
+    bots = db.show_bots()
     client = docker.from_env()
-    with open("attackers.txt",'r') as attackersfile:
-        for line in attackersfile:
-            attackers = line.strip().split(',')
-    for i in attackers[:-1]:
+    for i in bots:
         try:
-            container = client.containers.get(i)
+            container = client.containers.get(i['container_id'])
             container.kill()
             container.remove()
         except docker.errors.DockerException as ex:
             print("Error")
-    os.remove("attackers.txt")
+    db.remove_bots()
     return("nothing")
+
+@app.route('/ping')
+def ping_victim():
+    return("nothing")
+
+@app.route("/show_botnet")
+def show_botnet():
+    conn = db.connect_db()
+    bots = db.show_bots()
+    return render_template("show_botnet.html", bots = bots)
