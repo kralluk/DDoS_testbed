@@ -1,20 +1,13 @@
 $(document).ready(function(){
 
-    // $('#info').on('click', function(e) {
+   
+    // $('#server').on('click', function(e) {
     //     e.preventDefault()
-    //     $.getJSON('/info',
+    //     $.getJSON('/server',
     //         function(data) {
     //             console.log(data)
     //     });
     //   });
-
-    $('#server').on('click', function(e) {
-        e.preventDefault()
-        $.getJSON('/server',
-            function(data) {
-                console.log(data)
-        });
-      });
     $('#add_attacker').on('click', function(e) {
         e.preventDefault()
         $.getJSON('/add_attacker',

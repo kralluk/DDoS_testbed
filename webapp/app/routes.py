@@ -12,20 +12,20 @@ def create_db():
 def index():
     return render_template('index.html')
 
-@app.route('/server')
+@app.before_first_request
+# @app.route('/server')
 def server():
     client = docker.from_env()
     try:
         client.networks.create("testbed",driver="bridge", check_duplicate=True)
-        print("network for testbed created")
+        print("Network for testbed created.")
     except docker.errors.APIError as ex:
-        print("network already exists")
-#zajistit at server je up    
+        print("network already exists")   
     try:
-        client.containers.get("victim")
-    except docker.errors.NotFound as ex:
-        print("creating victim server..")
-        client.containers.run(image='httpd', name="victim", network="testbed", ports={'80/tcp':80})
+        client.containers.run(image='httpd', name="victim", network="testbed", detach=True, ports={'80/tcp':80})
+        print("Victim created.")
+    except docker.errors.APIError as ex:
+        print("Victim already exists.")
     return("nothing")
 
 @app.route('/add_attacker',methods = ['POST', 'GET'])
