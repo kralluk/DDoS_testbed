@@ -12,3 +12,4 @@
 - . venv/bin/activate
 - python3 -m pip install -r requirements.txt
 - flask run
+- app is running on http://localhost:5000
