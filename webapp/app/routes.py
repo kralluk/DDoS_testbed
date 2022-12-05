@@ -28,19 +28,19 @@ def server():
         print("Victim already exists.")
     return("nothing")
 
-@app.route('/add_attacker',methods = ['POST', 'GET'])
-def add_attacker():
+@app.route('/generate_botnet')
+def generate_botnet():
     client = docker.from_env()
-    try:
-        container = client.containers.run("ubuntu:latest", "sleep infinity", network="testbed", detach=True)
-        db.bot_insert(container.id)
-    except docker.errors.APIErorr as ex:
-        print("Container was not generated")
+    for i in range(5):
+        try:
+            container = client.containers.run("ubuntu:latest", "sleep infinity", network="testbed", detach=True)
+            db.bot_insert(container.id)
+        except docker.errors.APIErorr as ex:
+            print("Container was not generated")
     return ("nothing")
 
-@app.route('/remove_attacker')
-def remove_attacker():
-    conn = db.connect_db()
+@app.route('/remove_botnet')
+def remove_botnet():
     bots = db.show_bots()
     client = docker.from_env()
     for i in bots:
@@ -59,6 +59,5 @@ def ping_victim():
 
 @app.route("/show_botnet")
 def show_botnet():
-    conn = db.connect_db()
     bots = db.show_bots()
     return render_template("show_botnet.html", bots = bots)

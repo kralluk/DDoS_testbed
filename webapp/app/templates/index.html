@@ -4,22 +4,21 @@
         <!-- <script src="jquery-3.6.0.min.js"></script> -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="/static/main.js"></script>
-        <title>Ovladani botnetu</title>
+        <title>Botnet control</title>
     </head>
 <body>
-    <!-- <button id="server">server</button> -->
-    <button id="add_attacker">Pridat utocnika</button>
-    <button id="remove_attacker">Odebrat utocniky</button>
+    <button id="generate_botnet">Generate botnet</button><br>
+    <button id="remove_botnet">Remove botnet</button>
     
-        {% for bot in bots %}
+        <!-- {% for bot in bots %}
         <tr>
                 <td>{{bot['id']}}</td>
             <td>{{bot['container_id']}}</td>
         </tr>
-        {% endfor%}
+        {% endfor%} -->
 
         <form action="show_botnet">
-            <input type="submit" value="Ukaz botnet" name="action1"/>
+            <input type="submit" value="Show botnet" name="action1"/>
         </form>
     </body>
 </html>

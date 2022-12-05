@@ -1,23 +1,16 @@
 $(document).ready(function(){
 
    
-    // $('#server').on('click', function(e) {
-    //     e.preventDefault()
-    //     $.getJSON('/server',
-    //         function(data) {
-    //             console.log(data)
-    //     });
-    //   });
-    $('#add_attacker').on('click', function(e) {
+    $('#generate_botnet').on('click', function(e) {
         e.preventDefault()
-        $.getJSON('/add_attacker',
+        $.getJSON('/generate_botnet',
             function(data) {
                 console.log(data)
         });
       });
-    $('#remove_attacker').on('click', function(e) {
+    $('#remove_botnet').on('click', function(e) {
         e.preventDefault()
-        $.getJSON('/remove_attacker',
+        $.getJSON('/remove_botnet',
             function(data) {
                 console.log(data)
         });
