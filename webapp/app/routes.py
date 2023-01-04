@@ -1,5 +1,5 @@
 from typing import Container
-from flask import render_template, request
+from flask import render_template, request, redirect
 import docker, os, sqlite3
 from app import app, db
 
