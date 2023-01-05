@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- <script src="jquery-3.6.0.min.js"></script> -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="/static/main.js"></script>
         <title>Botnet control</title>
     </head>
 <body>
+    <label for="cpus">CPUs:</label><br>
+    <input type="number" id="cpus" name="cpus"><br>
+    <br>
+    <label for="memory_limit">Memory limit:</label><br>
+    <input type="number" id="memory_limit" name="memory_limit"><br>
+    <br>
+    <label for="swap_memory">Swap memory:</label><br>
+    <input type="number" id="swap_memory" name="swap_memory"><br>
+    <br>
     <button id="generate_botnet">Generate botnet</button><br>
     <button id="remove_botnet">Remove botnet</button>
-    
-        <!-- {% for bot in bots %}
-        <tr>
-                <td>{{bot['id']}}</td>
-            <td>{{bot['container_id']}}</td>
-        </tr>
-        {% endfor%} -->
-
     <form action="show_botnet">
         <input type="submit" value="Show botnet" name="action1"/>
     </form>
