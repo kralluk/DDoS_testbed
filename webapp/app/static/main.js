@@ -15,4 +15,11 @@ $(document).ready(function(){
                 console.log(data)
         });
       });
+    $('#ping').on('click', function(e) {
+      e.preventDefault()
+      $.getJSON('/ping',
+          function(data) {
+              console.log(data)
+      });
+    });
 });

@@ -1,7 +1,7 @@
 from typing import Container
-from flask import render_template, request, redirect
-import docker, os, sqlite3
-from app import app, db
+from flask import render_template, request
+import docker, os, sqlite3, threading
+from app import app, db, funcs
 
 
 @app.before_first_request
@@ -33,7 +33,7 @@ def generate_botnet():
     client = docker.from_env()
     for i in range(5):
         try:
-            container = client.containers.run("ubuntu:latest", "sleep infinity", network="testbed", detach=True)
+            container = client.containers.run("ubuntu_ping", "sleep infinity", network="testbed", detach=True)
             db.bot_insert(container.id)
         except docker.errors.APIErorr as ex:
             print("Container was not generated")
@@ -55,7 +55,31 @@ def remove_botnet():
 
 @app.route('/ping')
 def ping_victim():
-    return("nothing")
+    client = docker.from_env()
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT container_id FROM bots")
+    result = cursor.fetchall()
+    container_ids = [x[0] for x in result]
+    threads = [threading.Thread(target=funcs.ping, args=(container_id,)) for container_id in container_ids]
+
+    # Spuštění všech vláken
+    for thread in threads:
+        thread.start()
+    # Čekání na dokončení všech vláken
+    for thread in threads:
+        thread.join()
+
+    conn.close()
+    return 'Pinging finished'
+    # for container_id in container_ids:
+    #     container = client.containers.get(container_id[0])
+    #     exec_output = container.exec_run(["/bin/bash", "-c", "ping -c 3 victim"])
+    #     if exec_output.exit_code == 0:
+    #         print(f"Ping successfully run in container {container.name}")
+    #     else:
+    #         print(f"Error running ping in container {container.name}: {exec_output.stderr}")
+    
 
 @app.route("/show_botnet")
 def show_botnet():
