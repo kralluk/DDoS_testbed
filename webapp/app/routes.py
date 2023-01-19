@@ -1,6 +1,6 @@
 from typing import Container
 from flask import render_template, request
-import docker, os, sqlite3, threading
+import docker, sqlite3, threading, psutil
 from app import app, db, funcs
 
 
@@ -28,16 +28,34 @@ def server():
         print("Victim already exists.")
     return("nothing")
 
-@app.route('/generate_botnet')
+
+@app.route('/generate_botnet', methods=['POST','GET'])
 def generate_botnet():
     client = docker.from_env()
-    for i in range(5):
-        try:
-            container = client.containers.run("ubuntu_ping", "sleep infinity", network="testbed", detach=True)
+    bots_number = int(request.form['bots_number'])
+    cpu_cores_per_container = int(request.form['cpu_cores_per_container'])
+    available_cpu_cores = psutil.cpu_count()
+    if cpu_cores_per_container > available_cpu_cores: 
+        print(f"Not enough CPU cores available.")
+        return(f"Not enough CPU cores available, your host machine has only {available_cpu_cores} cores, please select a maximum of this number.")
+
+    else:
+        for i in range(bots_number):
+            container = client.containers.run("ubuntu_ping", "sleep infinity", network="testbed", cpu_period=100000, cpu_quota=cpu_cores_per_container * 100000, detach=True)
             db.bot_insert(container.id)
-        except docker.errors.APIErorr as ex:
-            print("Container was not generated")
-    return ("nothing")
+    return("Containers created successfully")
+
+
+# @app.route('/generate_botnet')
+# def generate_botnet():
+#     client = docker.from_env()
+#     for i in range(5):
+#         try:
+#             container = client.containers.run("ubuntu_ping", "sleep infinity", network="testbed", detach=True)
+#             db.bot_insert(container.id)
+#         except docker.errors.APIErorr as ex:
+#             print("Container was not generated")
+#     return ("nothing")
 
 @app.route('/remove_botnet')
 def remove_botnet():
@@ -72,14 +90,6 @@ def ping_victim():
 
     conn.close()
     return 'Pinging finished'
-    # for container_id in container_ids:
-    #     container = client.containers.get(container_id[0])
-    #     exec_output = container.exec_run(["/bin/bash", "-c", "ping -c 3 victim"])
-    #     if exec_output.exit_code == 0:
-    #         print(f"Ping successfully run in container {container.name}")
-    #     else:
-    #         print(f"Error running ping in container {container.name}: {exec_output.stderr}")
-    
 
 @app.route("/show_botnet")
 def show_botnet():
