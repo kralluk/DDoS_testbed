@@ -34,16 +34,18 @@ def generate_botnet():
     client = docker.from_env()
     bots_number = int(request.form['bots_number'])
     cpu_cores_per_container = int(request.form['cpu_cores_per_container'])
-    available_cpu_cores = psutil.cpu_count()
-    if cpu_cores_per_container > available_cpu_cores: 
-        print(f"Not enough CPU cores available.")
-        return(f"Not enough CPU cores available, your host machine has only {available_cpu_cores} cores, please select a maximum of this number.")
-
-    else:
-        for i in range(bots_number):
-            container = client.containers.run("ubuntu_ping", "sleep infinity", network="testbed", cpu_period=100000, cpu_quota=cpu_cores_per_container * 100000, detach=True)
-            db.bot_insert(container.id)
-    return("Containers created successfully")
+    memory_limit = int(request.form['memory_limit'])
+    memory_unit = request.form['memory_unit']
+    print(memory_unit)
+    resource_check, message = funcs.check_resources(cpu_cores_per_container,memory_limit, memory_unit)
+    if not resource_check:
+        return message
+    return funcs.create_containers(bots_number,cpu_cores_per_container, memory_limit, memory_unit)
+    # else:
+    #     for i in range(bots_number):
+    #         container = client.containers.run("ubuntu_ping", "sleep infinity", network="testbed", cpu_period=100000, cpu_quota=cpu_cores_per_container * 100000, detach=True)
+    #         db.bot_insert(container.id)
+    # return("Containers created successfully")
 
 
 # @app.route('/generate_botnet')

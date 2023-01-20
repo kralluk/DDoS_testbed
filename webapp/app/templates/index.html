@@ -1,37 +1,52 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="/static/main.js"></script>
-        <title>Botnet control</title>
-    </head>
-<body>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/static/main.js"></script>
+    <title>Botnet control</title>
+  </head>
+  <body>
     <form id="generate_botnet_form" method="post" action="/generate_botnet">
-        <label for="bots_number">Number of bots:</label>
-        <input type="number" id="bots_number" name="bots_number" min="1" value="5">
-    
-        <label for="cpu_cores_per_container">CPU cores per container:</label>
-        <input type="number" id="cpu_cores_per_container" name="cpu_cores_per_container" min="1" value="1">
-    
-        <input type="submit" value="Generate Botnet">
+      <label for="bots_number">Number of bots:</label>
+      <input
+        type="number"
+        id="bots_number"
+        name="bots_number"
+        min="1"
+        value="5"
+      /><br />
+
+      <label for="cpu_cores_per_container">CPU cores per container:</label>
+      <input
+        type="number"
+        id="cpu_cores_per_container"
+        name="cpu_cores_per_container"
+        min="1"
+        value="1"
+      /><br />
+      <label for="memory_limit">Memory limitation per container:</label>
+      <input type="number" id="memory_limit" name="memory_limit" />
+      <select name="memory_unit">
+        <option value="B">B</option>
+        <option value="KB">KB</option>
+        <option value="MB">MB</option>
+        <option value="GB">GB</option></select
+      ><br />
+      <br /><input type="submit" value="Generate Botnet" />
     </form>
-    <!-- <label for="cpu_cores_per_container">CPUs:</label><br>
-    <input type="number" id="cpu_cores_per_container" name="cpu_cores_per_container"><br> -->
-    <br>
-    <label for="memory_limit">Memory limit:</label><br>
-    <input type="number" id="memory_limit" name="memory_limit"><br>
-    <br>
-    <label for="swap_memory">Swap memory:</label><br>
-    <input type="number" id="swap_memory" name="swap_memory"><br>
-    <br>    
+    <br />
+    <br />
+    <label for="swap_memory">Swap memory:</label><br />
+    <input type="number" id="swap_memory" name="swap_memory" /><br />
+    <br />
     <!-- <label for="bots_number">Number of bots:</label><br>
     <input type="number" id="bots_number" name="bots_number" value="5" min="1">
     <br>
     <button id="generate_botnet">Generate botnet</button><br> -->
     <button id="remove_botnet">Remove botnet</button>
     <form action="show_botnet">
-        <input type="submit" value="Show botnet" name="action1"/>
+      <input type="submit" value="Show botnet" name="action1" />
     </form>
     <button id="ping">Ping</button>
-</body>
+  </body>
 </html>
