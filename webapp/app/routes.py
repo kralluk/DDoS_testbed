@@ -34,7 +34,6 @@ def generate_botnet():
     cpu_cores_per_container = int(request.form['cpu_cores_per_container'])
     memory_limit = int(request.form['memory_limit'])
     memory_unit = request.form['memory_unit']
-    print(memory_unit)
     resource_check, message = bot_creation.check_resources(cpu_cores_per_container,memory_limit, memory_unit)
     if not resource_check:
         return message
