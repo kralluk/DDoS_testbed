@@ -1,7 +1,6 @@
-from typing import Container
 from flask import render_template, request
 import docker, sqlite3, threading, psutil
-from app import app, db, funcs
+from app import app, db, bot_creation, attacks
 
 
 @app.before_first_request
@@ -31,21 +30,15 @@ def server():
 
 @app.route('/generate_botnet', methods=['POST','GET'])
 def generate_botnet():
-    client = docker.from_env()
     bots_number = int(request.form['bots_number'])
     cpu_cores_per_container = int(request.form['cpu_cores_per_container'])
     memory_limit = int(request.form['memory_limit'])
     memory_unit = request.form['memory_unit']
     print(memory_unit)
-    resource_check, message = funcs.check_resources(cpu_cores_per_container,memory_limit, memory_unit)
+    resource_check, message = bot_creation.check_resources(cpu_cores_per_container,memory_limit, memory_unit)
     if not resource_check:
         return message
-    return funcs.create_containers(bots_number,cpu_cores_per_container, memory_limit, memory_unit)
-    # else:
-    #     for i in range(bots_number):
-    #         container = client.containers.run("ubuntu_ping", "sleep infinity", network="testbed", cpu_period=100000, cpu_quota=cpu_cores_per_container * 100000, detach=True)
-    #         db.bot_insert(container.id)
-    # return("Containers created successfully")
+    return bot_creation.create_containers(bots_number,cpu_cores_per_container, memory_limit, memory_unit)
 
 
 # @app.route('/generate_botnet')
@@ -75,13 +68,12 @@ def remove_botnet():
 
 @app.route('/ping')
 def ping_victim():
-    client = docker.from_env()
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
     cursor.execute("SELECT container_id FROM bots")
     result = cursor.fetchall()
     container_ids = [x[0] for x in result]
-    threads = [threading.Thread(target=funcs.ping, args=(container_id,)) for container_id in container_ids]
+    threads = [threading.Thread(target=attacks.ping, args=(container_id,)) for container_id in container_ids]
 
     # Spuštění všech vláken
     for thread in threads:

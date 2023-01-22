@@ -25,24 +25,24 @@
         value="1"
       /><br />
       <label for="memory_limit">Memory limitation per container:</label>
-      <input type="number" id="memory_limit" name="memory_limit" />
+      <input
+        type="number"
+        id="memory_limit"
+        name="memory_limit"
+        min="1"
+        value="6"
+      />
       <select name="memory_unit">
-        <option value="B">B</option>
-        <option value="KB">KB</option>
         <option value="MB">MB</option>
         <option value="GB">GB</option></select
       ><br />
-      <br /><input type="submit" value="Generate Botnet" />
+      <br /><input type="submit" value="Generate Bots" />
     </form>
     <br />
-    <br />
+    <!-- <br />
     <label for="swap_memory">Swap memory:</label><br />
     <input type="number" id="swap_memory" name="swap_memory" /><br />
-    <br />
-    <!-- <label for="bots_number">Number of bots:</label><br>
-    <input type="number" id="bots_number" name="bots_number" value="5" min="1">
-    <br>
-    <button id="generate_botnet">Generate botnet</button><br> -->
+    <br /> -->
     <button id="remove_botnet">Remove botnet</button>
     <form action="show_botnet">
       <input type="submit" value="Show botnet" name="action1" />
