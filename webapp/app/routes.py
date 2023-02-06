@@ -2,6 +2,10 @@ from flask import render_template, request
 import docker, sqlite3, threading, psutil
 from app import app, db, bot_creation, attacks
 
+client = docker.from_env()
+
+# @app.before_first_request
+# def dckr_compose():
 
 @app.before_first_request
 def create_db():
@@ -9,12 +13,12 @@ def create_db():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    disks = bot_creation.get_disks()
+    return render_template("index.html", disks=disks)
 
 @app.before_first_request
 # @app.route('/server')
 def server():
-    client = docker.from_env()
     try:
         client.networks.create("testbed",driver="bridge", check_duplicate=True)
         print("Network for testbed created.")
@@ -34,22 +38,14 @@ def generate_botnet():
     cpu_cores_per_container = int(request.form['cpu_cores_per_container'])
     memory_limit = int(request.form['memory_limit'])
     memory_unit = request.form['memory_unit']
+    disk = request.form["disk"]
+    write_iops = int(request.form["write_iops"])
+    read_iops = int(request.form["read_iops"])
     resource_check, message = bot_creation.check_resources(cpu_cores_per_container,memory_limit, memory_unit)
     if not resource_check:
         return message
-    return bot_creation.create_containers(bots_number,cpu_cores_per_container, memory_limit, memory_unit)
+    return bot_creation.create_containers(bots_number,cpu_cores_per_container, memory_limit, memory_unit, disk, write_iops, read_iops)
 
-
-# @app.route('/generate_botnet')
-# def generate_botnet():
-#     client = docker.from_env()
-#     for i in range(5):
-#         try:
-#             container = client.containers.run("ubuntu_ping", "sleep infinity", network="testbed", detach=True)
-#             db.bot_insert(container.id)
-#         except docker.errors.APIErorr as ex:
-#             print("Container was not generated")
-#     return ("nothing")
 
 @app.route('/remove_botnet')
 def remove_botnet():

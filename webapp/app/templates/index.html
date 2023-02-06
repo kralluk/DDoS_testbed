@@ -7,6 +7,7 @@
   </head>
   <body>
     <form id="generate_botnet_form" method="post" action="/generate_botnet">
+      <h1>Botnet configuration</h1>
       <label for="bots_number">Number of bots:</label>
       <input
         type="number"
@@ -35,10 +36,33 @@
       <select name="memory_unit">
         <option value="MB">MB</option>
         <option value="GB">GB</option></select
-      ><br />
-      <br /><input type="submit" value="Generate Bots" />
+      ><br /><br />
+
+      <label for="disk_select">Select Disk to limit IOPS:</label>
+      <select id="disk_select" name="disk">
+        {% for disk in disks %}
+        <option value="{{ disk }}">{{ disk }}</option>
+        {% endfor %}
+      </select>
+      <br />
+      <label for="write_iops">Write IOPS:</label>
+      <input
+        type="number"
+        id="write_iops"
+        name="write_iops"
+        min="0"
+        value="500"
+      />
+      <label for="read_iops">Read IOPS:</label>
+      <input
+        type="number"
+        id="read_iops"
+        name="read_iops"
+        min="0"
+        value="500"
+      />
+      <br /><br /><input type="submit" value="Generate Bots" />
     </form>
-    <br />
     <!-- <br />
     <label for="swap_memory">Swap memory:</label><br />
     <input type="number" id="swap_memory" name="swap_memory" /><br />
@@ -47,6 +71,7 @@
     <form action="show_botnet">
       <input type="submit" value="Show botnet" name="action1" />
     </form>
+    <h1>Attack configuration</h1>
     <button id="ping">Ping</button>
   </body>
 </html>
