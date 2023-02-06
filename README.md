@@ -3,6 +3,7 @@
 ## Requirements
 - Git 
 - Docker (You have to have rights to use docker without sudo - https://docs.docker.com/engine/install/linux-postinstall/)
+- Docker Compose
 - Venv
 
 ## Installation (Linux)
