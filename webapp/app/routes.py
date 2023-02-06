@@ -1,11 +1,18 @@
 from flask import render_template, request
-import docker, sqlite3, threading, psutil
+import docker, sqlite3, threading, psutil, subprocess, atexit
 from app import app, db, bot_creation, attacks
 
 client = docker.from_env()
 
-# @app.before_first_request
-# def dckr_compose():
+@atexit.register
+def compose_down():
+    subprocess.run(["docker-compose", "down"])
+
+# atexit.register(compose_down)
+
+@app.before_first_request
+def run_docker_compose():
+    subprocess.run(["docker-compose", "up", "-d"])
 
 @app.before_first_request
 def create_db():
@@ -17,7 +24,6 @@ def index():
     return render_template("index.html", disks=disks)
 
 @app.before_first_request
-# @app.route('/server')
 def server():
     try:
         client.networks.create("testbed",driver="bridge", check_duplicate=True)
