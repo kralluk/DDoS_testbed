@@ -31,7 +31,7 @@ def server():
     except docker.errors.APIError as ex:
         print("network already exists")   
     try:
-        client.containers.run(image='httpd', name="victim", network="testbed", detach=True, ports={'80/tcp':80})
+        client.containers.run(image='httpd:2', name="victim", network="testbed", detach=True, ports={'80/tcp':80})
         print("Victim created.")
     except docker.errors.APIError as ex:
         print("Victim already exists.")

@@ -36,4 +36,10 @@ $(document).ready(function () {
       console.log(data);
     });
   });
+  $("#icmp_flood").on("click", function (e) {
+    e.preventDefault();
+    $.getJSON("/icmp_flood", function (data) {
+      console.log(data);
+    });
+  });
 });
