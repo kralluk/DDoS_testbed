@@ -41,8 +41,8 @@ def get_disks():
 def get_container_config(cpu_cores, memory_limit_bytes, disk, write_iops, read_iops):
 
     container_config = {
-    # "image": "ubuntu_ping", 
-    "image": "ubuntu", 
+    "image": "ddos_testing/ubuntu:v1.0", 
+    # "image": "ubuntu", 
     "command": "sleep infinity", 
     "network": "testbed", 
     "mem_limit": str(memory_limit_bytes) + "b", 

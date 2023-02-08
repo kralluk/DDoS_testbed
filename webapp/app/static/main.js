@@ -42,4 +42,10 @@ $(document).ready(function () {
       console.log(data);
     });
   });
+  $("#stop_attack").on("click", function (e) {
+    e.preventDefault();
+    $.getJSON("/stop_attack", function (data) {
+      console.log(data);
+    });
+  });
 });

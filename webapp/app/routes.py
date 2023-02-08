@@ -1,5 +1,5 @@
 from flask import render_template, request
-import docker, sqlite3, threading, psutil, subprocess, atexit
+import docker, subprocess, atexit
 from app import app, db, bot_creation, attacks
 
 client = docker.from_env()
@@ -69,24 +69,19 @@ def remove_botnet():
 
 @app.route('/ping')
 def ping_victim():
-    conn = sqlite3.connect("database.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT container_id FROM bots")
-    result = cursor.fetchall()
-    container_ids = [x[0] for x in result]
-    threads = [threading.Thread(target=attacks.ping, args=(container_id,)) for container_id in container_ids]
+    attacks.execute_attack(attacks.ping)
+    return 'Ping finished'
 
-    # Spuštění všech vláken
-    for thread in threads:
-        thread.start()
-    # Čekání na dokončení všech vláken
-    for thread in threads:
-        thread.join()
-
-    conn.close()
-    return 'Pinging finished'
+@app.route('/icmp_flood')
+def icmp_flood():
+    attacks.execute_attack(attacks.icmp_flood)
+    return("nothing")
 
 @app.route("/show_botnet")
 def show_botnet():
     bots = db.show_bots()
     return render_template("show_botnet.html", bots = bots)
+
+@app.route('/stop_attack')
+def stop_attack():
+    attacks.execute_attack(attacks.stop_attack)
