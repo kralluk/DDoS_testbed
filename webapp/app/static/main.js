@@ -17,19 +17,28 @@ $(document).ready(function () {
     });
   });
 
-  // $('#generate_botnet').on('click', function(e) {
-  //     e.preventDefault()
-  //     $.getJSON('/generate_botnet',
-  //         function(data) {
-  //             console.log  (data)
-  //     });
-  //   });
-  $("#remove_botnet").on("click", function (e) {
+  $("#remove_botnet").click(function (e) {
     e.preventDefault();
-    $.getJSON("/remove_botnet", function (data) {
-      console.log(data);
+
+    $.ajax({
+      // type: "POST",
+      url: "/remove_botnet",
+      success: function (data) {
+        console.log(data);
+        alert("Botnet was removed");
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: " + error);
+      },
     });
   });
+
+  // $("#remove_botnet").on("click", function (e) {
+  //   e.preventDefault();
+  //   $.getJSON("/remove_botnet", function (data) {
+  //     console.log(data);
+  //   });
+  // });
   $("#ping").on("click", function (e) {
     e.preventDefault();
     $.getJSON("/ping", function (data) {
