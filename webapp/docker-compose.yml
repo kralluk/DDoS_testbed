@@ -4,6 +4,8 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    networks:
+    - testbed
     ports:
     - 9090:9090
     command:
@@ -15,6 +17,8 @@ services:
   cadvisor:
     image: zcube/cadvisor:latest
     container_name: cadvisor
+    networks:
+    - testbed
     ports:
     - 8080:8080
     volumes:
@@ -25,6 +29,8 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
+    networks:
+     - testbed
     ports:
       - "3000:3000"
     depends_on:
@@ -37,3 +43,19 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: 1234
       GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/11600.json
 #      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+  victim:
+    image: httpd:2
+    container_name: victim
+    networks:
+      - testbed
+    ports:
+      - "80:80"
+   # command: tail -f /dev/null # keep container running in the foreground
+    restart: always
+networks:
+  testbed:
+    driver: bridge
+    name: testbed
+    ipam:
+      driver: default
+    internal: false  #if it were true here, the network would be completely isolated

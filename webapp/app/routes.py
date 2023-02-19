@@ -46,9 +46,16 @@ def ping_victim():
     return "Ping finished"
 
 
-@app.route("/icmp_flood")
+@app.route("/icmp_flood", methods=["POST"])
 def icmp_flood():
     attacks.execute_attack(attacks.icmp_flood)
+    return "nothing"
+
+
+@app.route("/slowloris", methods=["POST"])
+def slowloris():
+    number_of_connections = int(request.form["number_of_connections"])
+    attacks.execute_attack(attacks.slowloris, number_of_connections)
     return "nothing"
 
 
