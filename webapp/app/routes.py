@@ -57,7 +57,10 @@ def icmp_flood():
 def slowloris():
     number_of_connections = int(request.form["number_of_connections"])
     connection_rate = int(request.form["connection_rate"])
-    attacks.execute_attack(attacks.slowloris, number_of_connections, connection_rate)
+    attack_duration = int(request.form["attack_duration"])
+    attacks.execute_attack(
+        attacks.slowloris, number_of_connections, connection_rate, attack_duration
+    )
     return "nothing"
 
 
