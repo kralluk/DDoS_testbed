@@ -49,6 +49,11 @@ services:
     container_name: victim
     networks:
       - testbed
+#    cpus: "1"
+    cpu_period: 100000
+    cpu_quota: 100000
+    mem_limit: 500m
+    memswap_limit: 500m
     ports:
       - "80:80"
     volumes:

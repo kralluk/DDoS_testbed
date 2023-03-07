@@ -1,12 +1,12 @@
 from flask import render_template, request
 import docker
-from app import app, db, bot_creation, attacks
+from app import app, db, bot_creation, attacks, resource_utils, victim
 from .settings import client
 
 
 @app.route("/")
 def index():
-    disks = bot_creation.get_disks()
+    disks = resource_utils.get_disks()
     return render_template("index.html", disks=disks)
 
 
@@ -19,7 +19,7 @@ def generate_botnet():
     disk = request.form["disk"]
     write_iops = int(request.form["write_iops"])
     read_iops = int(request.form["read_iops"])
-    resource_check, message = bot_creation.check_resources(
+    resource_check, message = resource_utils.check_resources(
         cpu_cores_per_container, memory_limit, memory_unit
     )
     if not resource_check:
@@ -74,3 +74,17 @@ def show_botnet():
 def stop_attack():
     attacks.execute_attack(attacks.stop_attack)
     return "nothing"
+
+@app.route("/edit_victim", methods=["POST", "GET"])
+def edit_victim():
+    victim_cpu_cores = int(request.form["victim_cpu_cores"])
+    victim_memory_limit = int(request.form["victim_memory_limit"])
+    memory_unit = request.form["memory_unit"]
+    resource_check, message = resource_utils.check_resources(
+        victim_cpu_cores, victim_memory_limit, memory_unit
+    )
+    if not resource_check:
+        return message
+    return victim.edit_victim(
+        victim_cpu_cores, victim_memory_limit, memory_unit
+    )
