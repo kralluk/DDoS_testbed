@@ -3,6 +3,7 @@
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="/static/main.js"></script>
+    <script src="/static/attacks.js"></script>
     <script src="/static/victim.js"></script>
 
     <title>Botnet control</title>
@@ -10,8 +11,13 @@
   <body>
     <!-- BOTNET CONFIG -->
 
-    <form id="generate_botnet_form" method="post" action="/generate_botnet">
-      <h1>Botnet configuration</h1>
+    <form
+      id="generate_botnet_form"
+      method="post"
+      action="/generate_botnet"
+      autocomplete="off"
+    >
+      <h2>Botnet configuration</h2>
       <label for="bots_number">Number of bots:</label>
       <input
         type="number"
@@ -75,13 +81,14 @@
 
     <!-- ATTACK CONFIG -->
 
-    <h1>Attack configuration</h1>
+    <h2>Attack configuration</h2>
     <button id="ping">Ping</button>
 
-    <select id="attack_option">
-      <option value="">Select an attack</option>
+    <select id="attack_option" autocomplete="off">
+      <option value="" selected>Select an attack</option>
       <option value="option1" data-form="icmp_flood">ICMP Flood</option>
       <option value="option2" data-form="slowloris_form">Slowloris</option>
+      <option value="option3" data-form="slow_read_form">Slow Read</option>
     </select>
     <br />
     <form
@@ -126,7 +133,7 @@
         min="1"
         value="50"
       />
-      <br />
+
       <label for="connection_rate">Connection rate per second:</label>
 
       <input
@@ -136,7 +143,6 @@
         min="1"
         value="50"
       />
-      <br />
       <label for="connection_rate">Attack duration:</label>
 
       <input
@@ -149,11 +155,96 @@
       <input type="submit" value="Run slowloris" />
     </form>
 
+    <form
+      id="slow_read_form"
+      class="option-form"
+      style="display: none"
+      action="/slow_read"
+    >
+      <label for="number_of_connections">Number of connections per bot:</label>
+
+      <input
+        type="number"
+        id="number_of_connections"
+        name="number_of_connections"
+        min="1"
+        value="50"
+      />
+      <label for="connection_rate">Connection rate per second:</label>
+
+      <input
+        type="number"
+        id="connection_rate"
+        name="connection_rate"
+        min="1"
+        value="50"
+      />
+      <label for="connection_rate">Attack duration:</label>
+
+      <input
+        type="number"
+        id="attack_duration"
+        name="attack_duration"
+        min="1"
+        value="30"
+      />
+      <label for="pipeline_factor">Pipeline factor:</label>
+
+      <input
+        type="number"
+        id="pipeline_factor"
+        name="pipeline_factor"
+        min="1"
+        value="1"
+      />
+      <label for="read_interval">Interval between read operations</label>
+
+      <input
+        type="number"
+        id="read_interval"
+        name="read_interval"
+        min="1"
+        value="1"
+      />
+
+      <label for="read_bytes">Number of bytes to read:</label>
+
+      <input
+        type="number"
+        id="read_bytes"
+        name="read_bytes"
+        min="1"
+        value="5"
+      />
+      <label for="window_size_start"
+        >Start of the range the TCP advertised window size:</label
+      >
+
+      <input
+        type="number"
+        id="window_size_start"
+        name="window_size_start"
+        min="1"
+        value="1"
+      />
+      <label for="window_size_end"
+        >End of the range the TCP advertised window size:</label
+      >
+
+      <input
+        type="number"
+        id="window_size_end"
+        name="window_size_end"
+        min="1"
+        value="512"
+      />
+      <input type="submit" value="Run Slow Read" />
+    </form>
     <hr />
 
     <!-- VICTIM CONFIG -->
 
-    <h1>Victim server configuration</h1>
+    <h2>Victim server configuration</h2>
     <form id="edit_victim_form" method="post" action="/edit_victim">
       <label for="victim_cpu_cores">CPU cores:</label>
       <input
@@ -176,22 +267,12 @@
         <option value="GB">GB</option></select
       ><br /><br />
 
-      <!-- <script>
-        document
-          .getElementById("memory_unit")
-          .addEventListener("change", function () {
-            var memoryInput = document.getElementById("memory");
-            if (this.value === "MB") {
-              memoryInput.min = "6";
-            } else {
-              memoryInput.min = "1";
-            }
-          });
-      </script> -->
-
       <input type="submit" value="Edit victim resources" />
     </form>
-
+    <hr />
+    <!-- BOTNET INFORMATION  -->
+    <h2>Botnet information</h2>
+    <p>Number of bots: <span id="bot-count"></span></p>
     <!-- MONITORING -->
     <div
       style="

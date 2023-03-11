@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, jsonify
 import docker
 from app import app, db, bot_creation, attacks, resource_utils, victim
 from .settings import client
@@ -7,7 +7,8 @@ from .settings import client
 @app.route("/")
 def index():
     disks = resource_utils.get_disks()
-    return render_template("index.html", disks=disks)
+    # bot_count = db.count_bots()
+    return render_template("index.html", disks=disks) #, bot_count=bot_count)
 
 
 @app.route("/generate_botnet", methods=["POST", "GET"])
@@ -63,6 +64,21 @@ def slowloris():
     )
     return "nothing"
 
+@app.route("/slow_read", methods=["POST"])
+def slowl_read():
+    number_of_connections = int(request.form["number_of_connections"])
+    connection_rate = int(request.form["connection_rate"])
+    attack_duration = int(request.form["attack_duration"])
+    pipeline_factor = int(request.form["pipeline_factor"])
+    read_interval = int(request.form["read_interval"])
+    read_bytes = int(request.form["read_bytes"])
+    window_size_start = int(request.form["window_size_start"])
+    window_size_end = int(request.form["window_size_end"])
+    attacks.execute_attack(
+        attacks.slow_read, number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end
+    )
+    return "nothing"
+
 
 @app.route("/show_botnet")
 def show_botnet():
@@ -88,3 +104,8 @@ def edit_victim():
     return victim.edit_victim(
         victim_cpu_cores, victim_memory_limit, memory_unit
     )
+
+@app.route("/bot_count")
+def bot_count():
+    bot_count = db.count_bots()
+    return jsonify(bot_count=bot_count)

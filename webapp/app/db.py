@@ -34,3 +34,14 @@ def show_bots():
     bots = conn.execute("SELECT container_id FROM bots").fetchall()
     conn.close()
     return bots
+
+def count_bots():
+    conn = connect_db()
+    c = conn.cursor()
+    c.execute('SELECT COUNT(*) FROM bots')
+    result = c.fetchone()
+    bot_count = result[0]
+    conn.close()
+    return bot_count
+    
+    
