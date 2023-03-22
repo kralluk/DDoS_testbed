@@ -6,7 +6,6 @@ def check_resources(cpu_cores_per_container, memory_limit, memory_unit):
     if memory_limit < 6 and memory_unit == "MB": # the smallest value allowed by Docker is 6MB
         return (False, "Each container has to have at least 6MB of memory.")
     available_cpu_cores = psutil.cpu_count()
-    print(available_cpu_cores)
     available_memory = psutil.virtual_memory().available
     if cpu_cores_per_container > available_cpu_cores:
         return (

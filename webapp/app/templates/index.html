@@ -27,9 +27,11 @@
         value="5"
       /><br />
 
+      <h3>Resources</h3>
       <label for="cpu_cores_per_container">CPU cores per container:</label>
       <input
         type="number"
+        step="0.1"
         id="cpu_cores_per_container"
         name="cpu_cores_per_container"
         value="1"
@@ -42,41 +44,29 @@
       <select name="memory_unit">
         <option value="MB">MB</option>
         <option value="GB">GB</option></select
-      ><br /><br />
+      ><br />
 
-      <label for="disk_select">Select Disk to limit IOPS:</label>
-      <select id="disk_select" name="disk">
-        {% for disk in disks %}
-        <option value="{{ disk }}">{{ disk }}</option>
-        {% endfor %}
+      <h3>Network limitation</h3>
+      <p>Leave blank what you don't to limit</p>
+
+      <label for="packet_loss">Packet Loss (%):</label>
+      <input type="text" id="packet_loss" name="packet_loss" /><br />
+
+      <label for="bandwidth">Bandwidth:</label>
+      <input type="text" id="bandwidth" name="bandwidth" />
+      <select name="bandwidth_unit">
+        <option value="MB">MB/s</option>
+        <option value="KB">KB/s</option>
+        <option value="GB">GB/s</option>
       </select>
       <br />
-      <label for="write_iops">Write IOPS:</label>
-      <input
-        type="number"
-        id="write_iops"
-        name="write_iops"
-        min="0"
-        value="500"
-      />
-      <label for="read_iops">Read IOPS:</label>
-      <input
-        type="number"
-        id="read_iops"
-        name="read_iops"
-        min="0"
-        value="500"
-      />
-      <br /><br /><input type="submit" value="Generate Bots" />
+
+      <label for="delay">Delay (ms):</label>
+      <input type="text" id="delay" name="delay" /><br />
+
+      <input type="submit" value="Generate Bots" />
     </form>
-    <!-- <br />
-    <label for="swap_memory">Swap memory:</label><br />
-    <input type="number" id="swap_memory" name="swap_memory" /><br />
-    <br /> -->
-    <button id="remove_botnet">Remove botnet</button>
-    <form action="show_botnet">
-      <input type="submit" value="Show botnet" name="action1" />
-    </form>
+
     <hr />
 
     <!-- ATTACK CONFIG -->
@@ -96,7 +86,18 @@
       class="option-form"
       style="display: none"
       action="/icmp_flood"
+      autocomplete="off"
     >
+      <label for="connection_rate">Attack duration:</label>
+
+      <input
+        type="number"
+        id="attack_duration"
+        name="attack_duration"
+        min="1"
+        value="30"
+      />
+      <br />
       <label for="spoof">Spoof the source address?</label>
       <select id="spoof_select" name="spoof">
         <option value="no">No</option>
@@ -113,7 +114,6 @@
         />
       </div>
 
-      <br />
       <input type="submit" value="Run ICMP flood" />
       <button id="stop_attack">Stop attack</button>
     </form>
@@ -273,6 +273,29 @@
     <!-- BOTNET INFORMATION  -->
     <h2>Botnet information</h2>
     <p>Number of bots: <span id="bot-count"></span></p>
+
+    <form action="show_botnet">
+      <input type="submit" value="Show botnet" name="action1" />
+    </form>
+    <button id="remove_botnet">Remove botnet</button>
+    <form id="limit_network_form" method="post" action="/limit_network">
+      <!-- <label for="packet_loss">Packet Loss (%):</label>
+      <input type="text" id="packet_loss" name="packet_loss" /><br />
+
+      <label for="bandwidth">Bandwidth:</label>
+      <input type="text" id="bandwidth" name="bandwidth" />
+      <select name="bandwidth_unit">
+        <option value="MB">MB/s</option>
+        <option value="KB">KB/s</option>
+        <option value="GB">GB/s</option>
+      </select>
+      <br />
+
+      <label for="delay">Delay (ms):</label>
+      <input type="text" id="delay" name="delay" /><br />
+
+      <input type="submit" value="Apply Limits" /> -->
+    </form>
     <!-- MONITORING -->
     <div
       style="

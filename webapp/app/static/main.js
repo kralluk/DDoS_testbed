@@ -37,6 +37,23 @@ $(document).ready(function () {
     });
   });
 
+  $("#limit_network_form").on("submit", function (e)  {
+    e.preventDefault();
+    var formData = $(this).serialize();
+    
+    $.ajax({
+      type: "POST",
+      url: "/limit_network",
+      data: formData,
+      success: function (data) {
+        console.log(data);
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: " + error);
+      },
+    });
+  });
+
   
   $("#ping").on("click", function (e) {
     e.preventDefault();

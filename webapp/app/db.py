@@ -10,14 +10,30 @@ def connect_db():
 def create_db():
     conn = sqlite3.connect("database.db")
     conn.execute("DROP TABLE IF EXISTS bots")
-    # conn.execute('CREATE TABLE bots (id INTEGER PRIMARY KEY AUTOINCREMENT,container_id INTEGER)')
-    conn.execute("CREATE TABLE bots (container_id INTEGER)")
+    conn.execute("""
+        CREATE TABLE bots (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            container_id INTEGER,
+            cpu_cores INTEGER,
+            memory_limit INTEGER,
+            memory_unit TEXT,
+            packet_loss TEXT,
+            bandwidth TEXT,
+            bandwidth_unit TEXT,
+            delay TEXT
+        )
+    """)
     conn.close()
 
 
-def bot_insert(id):
+def bot_insert(id, cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth, bandwidth_unit, delay):
     conn = connect_db()
-    conn.execute("INSERT INTO bots (container_id) VALUES (?)", (id,))
+    # conn.execute("INSERT INTO bots (container_id) VALUES (?)", (id,))
+    conn.execute(
+    "INSERT INTO bots (container_id, cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth, bandwidth_unit, delay) "
+    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    (id, cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth, bandwidth_unit, delay)
+    )
     conn.commit()
     conn.close()
 

@@ -1,5 +1,5 @@
 from flask import render_template, request, jsonify
-import docker
+import docker, sqlite3
 from app import app, db, bot_creation, attacks, resource_utils, victim
 from .settings import client
 
@@ -7,19 +7,20 @@ from .settings import client
 @app.route("/")
 def index():
     disks = resource_utils.get_disks()
-    # bot_count = db.count_bots()
-    return render_template("index.html", disks=disks) #, bot_count=bot_count)
+    return render_template("index.html", disks=disks)
 
 
 @app.route("/generate_botnet", methods=["POST", "GET"])
 def generate_botnet():
     bots_number = int(request.form["bots_number"])
-    cpu_cores_per_container = int(request.form["cpu_cores_per_container"])
+    cpu_cores_per_container = float(request.form["cpu_cores_per_container"])
     memory_limit = int(request.form["memory_limit"])
     memory_unit = request.form["memory_unit"]
-    disk = request.form["disk"]
-    write_iops = int(request.form["write_iops"])
-    read_iops = int(request.form["read_iops"])
+    packet_loss = request.form.get('packet_loss')
+    bandwidth = request.form.get('bandwidth')
+    bandwidth_unit = request.form.get('bandwidth_unit')
+    delay = request.form.get('delay')
+    
     resource_check, message = resource_utils.check_resources(
         cpu_cores_per_container, memory_limit, memory_unit
     )
@@ -30,9 +31,10 @@ def generate_botnet():
         cpu_cores_per_container,
         memory_limit,
         memory_unit,
-        disk,
-        write_iops,
-        read_iops,
+        packet_loss,
+        bandwidth,
+        bandwidth_unit,
+        delay,
     )
 
 
@@ -50,7 +52,9 @@ def ping_victim():
 @app.route("/icmp_flood", methods=["POST"])
 def icmp_flood():
     ip_address = request.form["ip_address"]
-    attacks.execute_attack(attacks.icmp_flood, ip_address)
+    duration = int(request.form["attack_duration"])
+    attacks.execute_attack(attacks.icmp_flood, ip_address, duration)
+   # attacks.execute_attack(attacks.hping_duration, duration)
     return "nothing"
 
 
@@ -109,3 +113,41 @@ def edit_victim():
 def bot_count():
     bot_count = db.count_bots()
     return jsonify(bot_count=bot_count)
+
+@app.route("/limit_network_all", methods=['GET', 'POST'])
+def limit_network_all():
+    if request.method == 'POST':
+        packet_loss = request.form.get('packet_loss')
+        bandwidth = request.form.get('bandwidth')
+        bandwidth_unit = request.form.get('bandwidth_unit')
+        delay = request.form.get('delay')
+
+        # tc_command = 'tc qdisc add dev eth0 root netem'
+        # if packet_loss:
+        #     tc_command += f' loss {packet_loss}%'
+        # if bandwidth:
+        #     if bandwidth_unit == 'MB':
+        #         bandwidth = f'{float(bandwidth) * 1000000}'
+        #     elif bandwidth_unit == 'KB':
+        #         bandwidth = f'{float(bandwidth) * 1000}'
+        #     elif bandwidth_unit == 'GB':
+        #         bandwidth = f'{float(bandwidth) * 1000000000}'
+        #     tc_command += f' rate {bandwidth}'
+        # if delay:
+        #     tc_command += f' delay {delay}ms'
+                
+        # conn = sqlite3.connect("database.db")
+        # cursor = conn.cursor()  
+        # cursor.execute("SELECT container_id FROM bots")
+        # result = cursor.fetchall()
+        # container_ids = [x[0] for x in result]
+
+        # for container_id in container_ids:
+        #     container = client.containers.get(container_id)
+        #     container.exec_run('tc qdisc del dev eth0 root') #deleting tc config to ensure tc_command will work
+        #     container.exec_run(tc_command)
+        #     conn.execute("UPDATE bots SET packet_loss=?, bandwidth=?, bandwidth_unit=?, delay=? WHERE container_id=?", (packet_loss, bandwidth, bandwidth_unit, delay, container_id))
+
+        # conn.commit()
+        # conn.close()
+    return "nothing"
