@@ -37,6 +37,12 @@ def bot_insert(id, cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth,
     conn.commit()
     conn.close()
 
+def update_bot(cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth, bandwidth_unit, delay, container_id):
+    conn = connect_db()
+    conn.execute("UPDATE bots SET cpu_cores=?, memory_limit=?, memory_unit=?, packet_loss=?, bandwidth=?, bandwidth_unit=?, delay=? WHERE container_id=?", 
+    (cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth, bandwidth_unit, delay, container_id))
+    conn.commit()
+    conn.close()
 
 def remove_bots():
     conn = connect_db()

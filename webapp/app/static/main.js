@@ -21,6 +21,25 @@ $(document).ready(function () {
     });
   });
 
+  $("#edit_botnet_form").on("submit", function (e) {
+    e.preventDefault();
+    var formData = $(this).serialize();
+
+    $.ajax({
+      type: "POST",
+      url: "/edit_all_bots",
+      data: formData,
+      success: function (data) {
+        console.log(data);
+        alert(data);
+        updateBotCount();
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: " + error);
+      },
+    });
+  });
+
   $("#remove_botnet").click(function (e) {
     e.preventDefault();
 
@@ -40,7 +59,7 @@ $(document).ready(function () {
   $("#limit_network_form").on("submit", function (e)  {
     e.preventDefault();
     var formData = $(this).serialize();
-    
+
     $.ajax({
       type: "POST",
       url: "/limit_network",

@@ -277,25 +277,11 @@
     <form action="show_botnet">
       <input type="submit" value="Show botnet" name="action1" />
     </form>
-    <button id="remove_botnet">Remove botnet</button>
-    <form id="limit_network_form" method="post" action="/limit_network">
-      <!-- <label for="packet_loss">Packet Loss (%):</label>
-      <input type="text" id="packet_loss" name="packet_loss" /><br />
-
-      <label for="bandwidth">Bandwidth:</label>
-      <input type="text" id="bandwidth" name="bandwidth" />
-      <select name="bandwidth_unit">
-        <option value="MB">MB/s</option>
-        <option value="KB">KB/s</option>
-        <option value="GB">GB/s</option>
-      </select>
-      <br />
-
-      <label for="delay">Delay (ms):</label>
-      <input type="text" id="delay" name="delay" /><br />
-
-      <input type="submit" value="Apply Limits" /> -->
+    <form action="edit_botnet">
+      <input type="submit" value="Edit botnet" />
     </form>
+    <button id="remove_botnet">Remove botnet</button>
+    <form id="limit_network_form" method="post" action="/limit_network"></form>
     <!-- MONITORING -->
     <div
       style="

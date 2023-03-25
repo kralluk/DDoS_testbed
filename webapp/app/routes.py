@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify
 import docker, sqlite3
-from app import app, db, bot_creation, attacks, resource_utils, victim
+from app import app, db, bot_management, attacks, resource_utils, victim
 from .settings import client
 
 
@@ -26,7 +26,7 @@ def generate_botnet():
     )
     if not resource_check:
         return message
-    return bot_creation.create_containers(
+    return bot_management.create_containers(
         bots_number,
         cpu_cores_per_container,
         memory_limit,
@@ -40,7 +40,7 @@ def generate_botnet():
 
 @app.route("/remove_botnet")
 def remove_botnet():
-    return bot_creation.remove_botnet()
+    return bot_management.remove_botnet()
 
 
 @app.route("/ping")
@@ -88,6 +88,10 @@ def slowl_read():
 def show_botnet():
     bots = db.show_bots()
     return render_template("show_botnet.html", bots=bots)
+
+@app.route("/edit_botnet")
+def edit_botnet():
+    return render_template("edit_botnet.html")
 
 
 @app.route("/stop_attack")
@@ -151,3 +155,29 @@ def limit_network_all():
         # conn.commit()
         # conn.close()
     return "nothing"
+
+
+@app.route("/edit_all_bots", methods=["POST", "GET"])
+def edit_all_bots():
+    cpu_cores_per_container = float(request.form["cpu_cores_per_container"])
+    memory_limit = int(request.form["memory_limit"])
+    memory_unit = request.form["memory_unit"]
+    packet_loss = request.form.get('packet_loss')
+    bandwidth = request.form.get('bandwidth')
+    bandwidth_unit = request.form.get('bandwidth_unit')
+    delay = request.form.get('delay')
+    
+    resource_check, message = resource_utils.check_resources(
+        cpu_cores_per_container, memory_limit, memory_unit
+    )
+    if not resource_check:
+        return message
+    return bot_management.edit_all_bots(
+        cpu_cores_per_container,
+        memory_limit,
+        memory_unit,
+        packet_loss,
+        bandwidth,
+        bandwidth_unit,
+        delay,
+    )

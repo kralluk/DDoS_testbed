@@ -22,7 +22,7 @@ def get_container_config(cpu_cores, memory_limit_bytes, packet_loss, bandwidth, 
     command = f"{get_tc_command(packet_loss, bandwidth, bandwidth_unit, delay)} && sleep infinity"
 
     container_config = {
-        "image": "kralluk/ubuntu_for_ddos:v1.2-arm64",
+        "image": "kralluk/ubuntu_for_ddos:v1.2",
         "entrypoint": ["/bin/bash", "-c"],
         "command": [command],
         "network": "testbed",
@@ -36,6 +36,37 @@ def get_container_config(cpu_cores, memory_limit_bytes, packet_loss, bandwidth, 
 
     return container_config
 
+def get_container_edit_config(cpu_cores, memory_limit_bytes, packet_loss, bandwidth, bandwidth_unit, delay
+):
+    container_config = {
+        "mem_limit": str(memory_limit_bytes) + "b",
+        "memswap_limit": memory_limit_bytes,
+        "cpu_period": 100000,
+        "cpu_quota": int(cpu_cores * 100000),
+    }
+
+    return container_config
+
+def edit_all_bots(cpu_cores, memory_limit,memory_unit, packet_loss, bandwidth, bandwidth_unit, delay):
+    memory_limit_bytes = resource_utils.get_memory_limit(memory_limit, memory_unit)
+    print(packet_loss)
+
+    bots = db.show_bots()
+    command = f"{get_tc_command(packet_loss, bandwidth, bandwidth_unit, delay)}"
+    edited_config = get_container_edit_config(cpu_cores,
+        memory_limit_bytes,
+        packet_loss,
+        bandwidth,
+        bandwidth_unit,
+        delay,)
+    for i in bots:
+        
+        container = client.containers.get(i["container_id"])
+        container.update(**edited_config)
+        container.exec_run('tc qdisc del dev eth0 root') #deleting old network configuration
+        container.exec_run(command)
+        db.update_bot(cpu_cores, memory_limit,memory_unit, packet_loss, bandwidth, bandwidth_unit, delay, i["container_id"])
+    return "edited"
 
 def remove_botnet():
     bots = db.show_bots()
@@ -50,11 +81,6 @@ def remove_botnet():
     return "nothing"
 
 def get_tc_command(packet_loss, bandwidth, bandwidth_unit, delay):
-    # packet_loss = request.form.get('packet_loss')
-    # bandwidth = request.form.get('bandwidth')
-    # bandwidth_unit = request.form.get('bandwidth_unit')
-    # delay = request.form.get('delay')
-
     tc_command = 'tc qdisc add dev eth0 root netem'
     if packet_loss: 
         tc_command += f' loss {packet_loss}%'
@@ -71,17 +97,4 @@ def get_tc_command(packet_loss, bandwidth, bandwidth_unit, delay):
 
     return tc_command
 
-        # conn = sqlite3.connect("database.db")
-        # cursor = conn.cursor()  
-        # cursor.execute("SELECT container_id FROM bots")
-        # result = cursor.fetchall()
-        # container_ids = [x[0] for x in result]
-
-        # for container_id in container_ids:
-        #     container = client.containers.get(container_id)
-        #     container.exec_run('tc qdisc del dev eth0 root') #deleting tc config to ensure tc_command will work
-        #     container.exec_run(tc_command)
-        #     conn.execute("UPDATE bots SET packet_loss=?, bandwidth=?, bandwidth_unit=?, delay=? WHERE container_id=?", (packet_loss, bandwidth, bandwidth_unit, delay, container_id))
-
-        # conn.commit()
-        # conn.close()
+   

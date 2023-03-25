@@ -1,6 +1,6 @@
 # This module provides processes at the beginning and end of the program run
 
-from app import db, bot_creation
+from app import db, bot_management
 import docker, subprocess, atexit
 from .settings import client
 
@@ -17,7 +17,7 @@ def before_first_request_funcs(app):
 def at_exit_funcs(app):
     @atexit.register
     def remove_botnet_and_compose_down():
-        bot_creation.remove_botnet()
+        bot_management.remove_botnet()
         compose_down()
 
     def compose_down():
