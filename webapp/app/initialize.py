@@ -13,6 +13,7 @@ def before_first_request_funcs(app):
     @app.before_first_request
     def create_db():
         db.create_db()
+        db.victim_insert(1, 500, 'MB') # inserting default victim resources specified in docker-compose.yaml to db
 
 def at_exit_funcs(app):
     @atexit.register

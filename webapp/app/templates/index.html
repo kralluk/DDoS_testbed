@@ -244,8 +244,22 @@
 
     <!-- VICTIM CONFIG -->
 
-    <h2>Victim server configuration</h2>
-    <form id="edit_victim_form" method="post" action="/edit_victim">
+    <h2>Victim server</h2>
+    <ul>
+      <li>Apache version: 2.2</li>
+      <li>CPU Cores: <span class="victim-cpu-cores"></span></li>
+      <li>
+        Memory Limit: <span class="victim-memory-limit"></span>
+        <span class="victim-memory-unit"></span>
+      </li>
+    </ul>
+    <p><b>Edit victim:</b>.</p>
+    <form
+      id="edit_victim_form"
+      method="post"
+      action="/edit_victim"
+      autocomplete="off"
+    >
       <label for="victim_cpu_cores">CPU cores:</label>
       <input
         type="number"
@@ -275,10 +289,7 @@
     <p>Number of bots: <span id="bot-count"></span></p>
 
     <form action="show_botnet">
-      <input type="submit" value="Show botnet" name="action1" />
-    </form>
-    <form action="edit_botnet">
-      <input type="submit" value="Edit botnet" />
+      <input type="submit" value="Show botnet" />
     </form>
     <button id="remove_botnet">Remove botnet</button>
     <form id="limit_network_form" method="post" action="/limit_network"></form>

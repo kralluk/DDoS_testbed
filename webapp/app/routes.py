@@ -6,8 +6,8 @@ from .settings import client
 
 @app.route("/")
 def index():
-    disks = resource_utils.get_disks()
-    return render_template("index.html", disks=disks)
+    victim_data = db.get_victim_data()
+    return render_template("index.html", victim_data=victim_data)
 
 
 @app.route("/generate_botnet", methods=["POST", "GET"])
@@ -86,12 +86,8 @@ def slowl_read():
 
 @app.route("/show_botnet")
 def show_botnet():
-    bots = db.show_bots()
-    return render_template("show_botnet.html", bots=bots)
-
-@app.route("/edit_botnet")
-def edit_botnet():
-    return render_template("edit_botnet.html")
+    bot_data = db.get_bot_data()
+    return render_template("show_botnet.html", bot_data=bot_data)
 
 
 @app.route("/stop_attack")
@@ -113,6 +109,11 @@ def edit_victim():
         victim_cpu_cores, victim_memory_limit, memory_unit
     )
 
+@app.route("/victim_data")
+def victim_data():
+    victim_data = db.get_victim_data()
+    return jsonify(victim_data=victim_data)
+
 @app.route("/bot_count")
 def bot_count():
     bot_count = db.count_bots()
@@ -125,35 +126,6 @@ def limit_network_all():
         bandwidth = request.form.get('bandwidth')
         bandwidth_unit = request.form.get('bandwidth_unit')
         delay = request.form.get('delay')
-
-        # tc_command = 'tc qdisc add dev eth0 root netem'
-        # if packet_loss:
-        #     tc_command += f' loss {packet_loss}%'
-        # if bandwidth:
-        #     if bandwidth_unit == 'MB':
-        #         bandwidth = f'{float(bandwidth) * 1000000}'
-        #     elif bandwidth_unit == 'KB':
-        #         bandwidth = f'{float(bandwidth) * 1000}'
-        #     elif bandwidth_unit == 'GB':
-        #         bandwidth = f'{float(bandwidth) * 1000000000}'
-        #     tc_command += f' rate {bandwidth}'
-        # if delay:
-        #     tc_command += f' delay {delay}ms'
-                
-        # conn = sqlite3.connect("database.db")
-        # cursor = conn.cursor()  
-        # cursor.execute("SELECT container_id FROM bots")
-        # result = cursor.fetchall()
-        # container_ids = [x[0] for x in result]
-
-        # for container_id in container_ids:
-        #     container = client.containers.get(container_id)
-        #     container.exec_run('tc qdisc del dev eth0 root') #deleting tc config to ensure tc_command will work
-        #     container.exec_run(tc_command)
-        #     conn.execute("UPDATE bots SET packet_loss=?, bandwidth=?, bandwidth_unit=?, delay=? WHERE container_id=?", (packet_loss, bandwidth, bandwidth_unit, delay, container_id))
-
-        # conn.commit()
-        # conn.close()
     return "nothing"
 
 

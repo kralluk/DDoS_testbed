@@ -1,15 +1,91 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- <script src="jquery-3.6.0.min.js"></script> -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="/static/main.js"></script>
-        <title>Botnet</title>
-    </head>
-<body>
-    <!-- <button id=info>Info</button> -->
-    {% for bot in bots %}
-        <p>{{bot['container_id']}}</p>
-    {% endfor%}    
-    </body>
+  <head>
+    <!-- <script src="jquery-3.6.0.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/static/main.js"></script>
+    <title>Botnet</title>
+  </head>
+  <body>
+    <table cellpadding="10">
+      <thead>
+        <tr>
+          <th>Bot</th>
+          <th>CPU Cores</th>
+          <th>Memory Limit</th>
+          <th>Packet Loss (%)</th>
+          <th>Bandwidth</th>
+          <th>Delay (ms)</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bot in bot_data %}
+        <tr>
+          <td style="text-align: center">{{ bot['id'] }}</td>
+          <td style="text-align: center">{{ bot['cpu_cores'] }}</td>
+          <td style="text-align: center">
+            {{ bot['memory_limit'] }} {{ bot['memory_unit'] }}
+          </td>
+          <td style="text-align: center">{{ bot['packet_loss'] }}</td>
+          <td style="text-align: center">
+            {{ bot['bandwidth'] }} {{ bot['bandwidth_unit'] }}
+          </td>
+          <td style="text-align: center">{{ bot['delay'] }}</td>
+          <!-- <td>
+            <button class="edit-bot" data-id="{{ bot['id'] }}">Edit</button>
+          </td> -->
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>Edit all bots</h2>
+    <form
+      id="edit_botnet_form"
+      method="post"
+      action="/edit_botnet"
+      autocomplete="off"
+    >
+      <h3>Resources</h3>
+      <label for="cpu_cores_per_container">CPU cores per container:</label>
+      <input
+        type="number"
+        step="0.1"
+        id="cpu_cores_per_container"
+        name="cpu_cores_per_container"
+        value="1"
+      />
+      <!-- min="1" -->
+      <br />
+      <label for="memory_limit">Memory limitation per container:</label>
+      <input type="number" id="memory_limit" name="memory_limit" value="500" />
+      <!-- min="1" -->
+      <select name="memory_unit">
+        <option value="MB">MB</option>
+        <option value="GB">GB</option></select
+      ><br />
+
+      <h3>Network limitation</h3>
+      <p>Leave blank what you don't to limit</p>
+
+      <label for="packet_loss">Packet Loss (%):</label>
+      <input type="text" id="packet_loss" name="packet_loss" /><br />
+
+      <label for="bandwidth">Bandwidth:</label>
+      <input type="text" id="bandwidth" name="bandwidth" />
+      <select name="bandwidth_unit">
+        <option value="MB">MB/s</option>
+        <option value="KB">KB/s</option>
+        <option value="GB">GB/s</option>
+      </select>
+      <br />
+
+      <label for="delay">Delay (ms):</label>
+      <input type="text" id="delay" name="delay" /><br />
+
+      <input type="submit" value="Edit Bots" />
+    </form>
+    <button onclick="window.location.href = '/';">Menu</button>
+  </body>
 </html>
