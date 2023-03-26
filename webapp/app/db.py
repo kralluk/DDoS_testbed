@@ -68,6 +68,8 @@ def get_victim_data():
 
 
 def bot_insert(id, cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth, bandwidth_unit, delay):
+    if bandwidth == "":
+        bandwidth_unit = ""
     with connect_db() as conn:
         conn.execute(
             "INSERT INTO bots (container_id, cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth, bandwidth_unit, delay) "
@@ -78,6 +80,8 @@ def bot_insert(id, cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth,
 
 
 def bot_update(cpu_cores, memory_limit, memory_unit, packet_loss, bandwidth, bandwidth_unit, delay, container_id):
+    if bandwidth == "":
+        bandwidth_unit = ""
     with connect_db() as conn:
         conn.execute(
             "UPDATE bots SET cpu_cores=?, memory_limit=?, memory_unit=?, packet_loss=?, bandwidth=?, bandwidth_unit=?, delay=? WHERE container_id=?", 

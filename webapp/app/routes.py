@@ -53,7 +53,7 @@ def ping_victim():
 def icmp_flood():
     ip_address = request.form["ip_address"]
     duration = int(request.form["attack_duration"])
-    attacks.execute_attack(attacks.icmp_flood, ip_address, duration)
+    attacks.execute_attack(attacks.icmp_flood, duration , ip_address)
    # attacks.execute_attack(attacks.hping_duration, duration)
     return "nothing"
 
@@ -64,7 +64,7 @@ def slowloris():
     connection_rate = int(request.form["connection_rate"])
     attack_duration = int(request.form["attack_duration"])
     attacks.execute_attack(
-        attacks.slowloris, number_of_connections, connection_rate, attack_duration
+        attacks.slowloris, attack_duration, number_of_connections, connection_rate, attack_duration
     )
     return "nothing"
 
@@ -79,7 +79,7 @@ def slowl_read():
     window_size_start = int(request.form["window_size_start"])
     window_size_end = int(request.form["window_size_end"])
     attacks.execute_attack(
-        attacks.slow_read, number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end
+        attacks.slow_read, attack_duration, number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end
     )
     return "nothing"
 

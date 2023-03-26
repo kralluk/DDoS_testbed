@@ -33,6 +33,7 @@ $(document).ready(function () {
         console.log(data);
         alert(data);
         updateBotCount();
+        reloadPage();
       },
       error: function (xhr, status, error) {
         console.log("Error: " + error);
@@ -48,7 +49,9 @@ $(document).ready(function () {
       success: function (data) {
         console.log(data);
         updateBotCount(); // updating bot count after removing
-        alert("Botnet was removed");
+        // alert("Botnet was removed");
+        reloadPage();
+        
       },
       error: function (xhr, status, error) {
         console.log("Error: " + error);
@@ -86,6 +89,9 @@ $(document).ready(function () {
       $('#bot-count').text(data.bot_count);
     });
   }
+  
 });
 
-
+function reloadPage() {
+  location.reload();
+}

@@ -1,6 +1,7 @@
 import docker, threading, sqlite3, time
 from flask import request
 from .settings import client
+from app import db
 
 
 def ping(container_id):
@@ -9,7 +10,7 @@ def ping(container_id):
     print(result.output.decode())
 
 
-def icmp_flood(container_id, ip_address, duration):
+def icmp_flood(container_id, ip_address):
     container = client.containers.get(container_id)
     if ip_address: # If user wants to spoof src IP
         result = container.exec_run(
@@ -37,25 +38,29 @@ def slow_read(container_id, number_of_connections, connection_rate, attack_durat
     print(result.output.decode())
 
 
-def execute_attack(attack, *args): 
-    conn = sqlite3.connect("database.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT container_id FROM bots")
-    result = cursor.fetchall()
-    container_ids = [x[0] for x in result]
+def execute_attack(attack, duration, *args): 
+    container_ids = [x[0] for x in db.get_bot_ids()]
     threads = [
         threading.Thread(target=attack, args=(container_id, *args))
         for container_id in container_ids
     ]
 
-    # Spuštění všech vláken
+    # Start all threads
     for thread in threads:
         thread.start()
-    # Čekání na dokončení všech vláken
+
+    if attack.__name__ == "icmp_flood":
+        # Wait for the specified duration
+        time.sleep(duration)
+
+        # Stop icmp flood after duration
+        for container_id in container_ids:
+            threading.Thread(target=stop_attack, args=(container_id,)).start()
+    
+    # Wait for all threads to finish
     for thread in threads:
         thread.join()
 
-    conn.close()
     return "Attack finished"
 
 def stop_attack(container_id):
