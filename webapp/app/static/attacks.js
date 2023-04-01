@@ -51,6 +51,23 @@ $(document).ready(function () {
     });
   });
 
+  $("#udp_flood_form").on("submit", function (e) {
+    e.preventDefault();
+    var formData = $(this).serialize();
+
+    $.ajax({
+      type: "POST",
+      url: "/udp_flood",
+      data: formData,
+      success: function (data) {
+        console.log(data);
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: " + error);
+      },
+    });
+  });
+
   $("#stop_attack").on("click", function (e) {
     e.preventDefault();
     $.getJSON("/stop_attack", function (data) {

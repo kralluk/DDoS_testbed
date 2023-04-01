@@ -72,14 +72,49 @@
     <!-- ATTACK CONFIG -->
 
     <h2>Attack configuration</h2>
-    <button id="ping">Ping</button>
-
     <select id="attack_option" autocomplete="off">
       <option value="" selected>Select an attack</option>
       <option value="option1" data-form="icmp_flood">ICMP Flood</option>
       <option value="option2" data-form="slowloris_form">Slowloris</option>
       <option value="option3" data-form="slow_read_form">Slow Read</option>
+      <!-- <option value="option4" data-form="udp_flood_form">UDP Flood</option> -->
     </select>
+    <!-- <br />
+    <form
+      id="udp_flood_form"
+      class="option-form"
+      style="display: none"
+      action="/udp_flood"
+      autocomplete="off"
+    >
+      <label for="attack_duration">Attack duration:</label>
+
+      <input
+        type="number"
+        id="attack_duration"
+        name="attack_duration"
+        min="1"
+        value="30"
+      />
+      <br />
+      <label for="spoof">Spoof the source address?</label>
+      <select id="spoof_select" name="spoof">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="ip_address_input" style="display: none">
+        <label for="ip_address">Spoofed IP address:</label>
+        <input
+          type="text"
+          id="ip_address"
+          name="ip_address"
+          placeholder="Enter IP address"
+          value="1.2.3.4"
+        />
+      </div>
+
+      <input type="submit" value="Run UDP Flood" />
+    </form> -->
     <br />
     <form
       id="icmp_flood"
@@ -246,7 +281,7 @@
 
     <h2>Victim server</h2>
     <ul>
-      <li>Apache version: 2.2</li>
+      <li>Apache version: <span class="apache-version"></span></li>
       <li>CPU Cores: <span class="victim-cpu-cores"></span></li>
       <li>
         Memory Limit: <span class="victim-memory-limit"></span>
@@ -260,13 +295,21 @@
       action="/edit_victim"
       autocomplete="off"
     >
+      <label for="apache_version">Apache version:</label>
+      <select id="apache_version" name="apache_version">
+        <option value="2.2.34">2.2.34</option>
+        <option value="2.4.29">2.4.29</option>
+        <option value="2.4.56">2.4.56</option>
+      </select>
+      <br />
       <label for="victim_cpu_cores">CPU cores:</label>
       <input
         type="number"
         id="victim_cpu_cores"
         name="victim_cpu_cores"
-        min="1"
+        step="0.1"
         value="1"
+        min="0"
       /><br />
       <label for="victim_memory_limit">Memory limitation:</label>
       <input

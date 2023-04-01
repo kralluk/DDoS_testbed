@@ -30,40 +30,43 @@ def create_db():
         conn.execute("""
             CREATE TABLE victim (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                apache_version TEXT,
                 cpu_cores INTEGER,
                 memory_limit INTEGER,
                 memory_unit TEXT
             )
         """)
 
-def victim_insert(cpu_cores, memory_limit, memory_unit):
+def victim_insert(apache_version, cpu_cores, memory_limit, memory_unit):
     with connect_db() as conn:
         conn.execute("""
-            INSERT INTO victim (cpu_cores, memory_limit, memory_unit)
-            VALUES (?, ?, ?)
-        """, (cpu_cores, memory_limit, memory_unit))
+            INSERT INTO victim (apache_version, cpu_cores, memory_limit, memory_unit)
+            VALUES (?, ?, ?, ?)
+        """, (apache_version, cpu_cores, memory_limit, memory_unit))
 
-def victim_update(cpu_cores, memory_limit, memory_unit):
+def victim_update(apache_version, cpu_cores, memory_limit, memory_unit):
     with connect_db() as conn:
         conn.execute("""
             UPDATE victim
-            SET cpu_cores = ?,
+            SET apache_version = ?,
+                cpu_cores = ?,
                 memory_limit = ?,
                 memory_unit = ?
             WHERE id = 1
-        """, (cpu_cores, memory_limit, memory_unit))
+        """, (apache_version, cpu_cores, memory_limit, memory_unit))
 
 def get_victim_data():
     with connect_db() as conn:
-        cursor = conn.execute("SELECT cpu_cores, memory_limit, memory_unit FROM victim LIMIT 1")
+        cursor = conn.execute("SELECT apache_version, cpu_cores, memory_limit, memory_unit FROM victim LIMIT 1")
         row = cursor.fetchone()
         if row is None:
             return None
         else:
             return {
-                'cpu_cores': row[0],
-                'memory_limit': row[1],
-                'memory_unit': row[2]
+                'apache_version': row[0],
+                'cpu_cores': row[1],
+                'memory_limit': row[2],
+                'memory_unit': row[3]
             }
 
 

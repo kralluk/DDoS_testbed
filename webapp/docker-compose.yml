@@ -43,7 +43,7 @@ services:
       GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: >
         /etc/grafana/provisioning/dashboards/11600.json
   victim:
-    image: httpd:2.2
+    image: httpd:2.2.34
     container_name: victim
     cap_add:
       - NET_ADMIN
@@ -57,7 +57,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./provisioning/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./provisioning/httpd_2.2.34.conf:/usr/local/apache2/conf/httpd.conf
     restart: always
   apache_exporter:
     image: lusotycoon/apache-exporter

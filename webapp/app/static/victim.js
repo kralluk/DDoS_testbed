@@ -22,6 +22,7 @@ $(document).ready(function () {
     function updateVictimData() {
       $.getJSON('/victim_data', function(data) {
         if (data.victim_data) {
+            $('.apache-version').text(data.victim_data.apache_version);
             $('.victim-cpu-cores').text(data.victim_data.cpu_cores);
             $('.victim-memory-limit').text(data.victim_data.memory_limit);
             $('.victim-memory-unit').text(data.victim_data.memory_unit);

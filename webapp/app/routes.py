@@ -43,18 +43,18 @@ def remove_botnet():
     return bot_management.remove_botnet()
 
 
-@app.route("/ping")
-def ping_victim():
-    attacks.execute_attack(attacks.ping)
-    return "Ping finished"
-
-
 @app.route("/icmp_flood", methods=["POST"])
 def icmp_flood():
     ip_address = request.form["ip_address"]
     duration = int(request.form["attack_duration"])
     attacks.execute_attack(attacks.icmp_flood, duration , ip_address)
-   # attacks.execute_attack(attacks.hping_duration, duration)
+    return "nothing"
+
+@app.route("/udp_flood", methods=["POST", "GET"])
+def udp_flood():
+    ip_address = request.form["ip_address"]
+    duration = int(request.form["attack_duration"])
+    attacks.execute_attack(attacks.udp_flood, duration , ip_address)
     return "nothing"
 
 
@@ -97,7 +97,8 @@ def stop_attack():
 
 @app.route("/edit_victim", methods=["POST", "GET"])
 def edit_victim():
-    victim_cpu_cores = int(request.form["victim_cpu_cores"])
+    apache_version = request.form["apache_version"]
+    victim_cpu_cores = float(request.form["victim_cpu_cores"])
     victim_memory_limit = int(request.form["victim_memory_limit"])
     memory_unit = request.form["memory_unit"]
     resource_check, message = resource_utils.check_resources(
@@ -106,7 +107,7 @@ def edit_victim():
     if not resource_check:
         return message
     return victim.edit_victim(
-        victim_cpu_cores, victim_memory_limit, memory_unit
+        apache_version, victim_cpu_cores, victim_memory_limit, memory_unit
     )
 
 @app.route("/victim_data")
