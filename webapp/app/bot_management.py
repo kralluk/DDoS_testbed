@@ -85,11 +85,11 @@ def get_tc_command(packet_loss, bandwidth, bandwidth_unit, delay):
         tc_command += f' loss {packet_loss}%'
     if bandwidth:
         if bandwidth_unit == 'MB':
-            bandwidth = f'{float(bandwidth) * 1000000}'
+            bandwidth = f'{float(bandwidth) * 1000000}bps'
         elif bandwidth_unit == 'KB':
-            bandwidth = f'{float(bandwidth) * 1000}'
+            bandwidth = f'{float(bandwidth) * 1000}bps'
         elif bandwidth_unit == 'GB':
-            bandwidth = f'{float(bandwidth) * 1000000000}'
+            bandwidth = f'{float(bandwidth) * 1000000000}bps'
         tc_command += f' rate {bandwidth}'
     if delay:
         tc_command += f' delay {delay}ms'

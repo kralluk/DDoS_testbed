@@ -150,7 +150,7 @@
       </div>
 
       <input type="submit" value="Run ICMP flood" />
-      <button id="stop_attack">Stop attack</button>
+      <!-- <button id="stop_attack">Stop attack</button> -->
     </form>
 
     <form
@@ -289,12 +289,7 @@
       </li>
     </ul>
     <p><b>Edit victim:</b>.</p>
-    <form
-      id="edit_victim_form"
-      method="post"
-      action="/edit_victim"
-      autocomplete="off"
-    >
+    <form id="edit_victim_form" method="post" action="/edit_victim">
       <label for="apache_version">Apache version:</label>
       <select id="apache_version" name="apache_version">
         <option value="2.2.34">2.2.34</option>
