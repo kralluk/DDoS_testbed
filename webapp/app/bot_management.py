@@ -67,6 +67,25 @@ def edit_all_bots(cpu_cores, memory_limit,memory_unit, packet_loss, bandwidth, b
         db.bot_update(cpu_cores, memory_limit,memory_unit, packet_loss, bandwidth, bandwidth_unit, delay, i["container_id"])
     return "Botnet edited"
 
+def edit_bot(container_id, cpu_cores, memory_limit,memory_unit, packet_loss, bandwidth, bandwidth_unit, delay):
+    memory_limit_bytes = resource_utils.get_memory_limit(memory_limit, memory_unit)
+
+    # bots = db.get_bot_ids()
+    command = f"{get_tc_command(packet_loss, bandwidth, bandwidth_unit, delay)}"
+    edited_config = get_container_edit_config(cpu_cores,
+        memory_limit_bytes,
+        packet_loss,
+        bandwidth,
+        bandwidth_unit,
+        delay,)
+        
+    container = client.containers.get(container_id)
+    container.update(**edited_config)
+    container.exec_run('tc qdisc del dev eth0 root') #deleting old network configuration
+    container.exec_run(command)
+    db.bot_update(cpu_cores, memory_limit,memory_unit, packet_loss, bandwidth, bandwidth_unit, delay, container_id)
+    return "Bot edited"
+
 def remove_botnet():
     bots = db.get_bot_ids()
     for i in bots:

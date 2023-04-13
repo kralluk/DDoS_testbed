@@ -84,12 +84,68 @@ $(document).ready(function () {
     });
   });
 
+
   function updateBotCount() {
     $.getJSON('/bot_count', function(data) {
       $('#bot-count').text(data.bot_count);
     });
   }
   
+
+  var buttons = document.querySelectorAll('.edit-bot'); 
+  buttons.forEach(function(button) { 
+    button.addEventListener('click', function() {
+
+      var botData = button.getAttribute('data-id').split(",");
+      var containerId = botData[0];
+      var cpuCores = botData[1];
+      var memoryLimit = botData[2];
+      var memoryUnit = botData[3];
+      var packetLoss = botData[4];
+      var bandwidth = botData[5];
+      var bandwidthUnit = botData[6];
+      var delay = botData[7];
+
+      const form = document.querySelector('#edit-bot-form');
+
+      // document.addEventListener("DOMContentLoaded", function() {
+      
+      const containerIdInput = document.querySelector('#container_id');
+      const cpuCoresInput = document.querySelector('#cpu_cores_per_container');
+      const memoryLimitInput = document.querySelector('#memory_limit');
+      const packetLossInput = document.querySelector('#packet_loss');
+      const bandwidthInput = document.querySelector('#bandwidth');
+      const delayInput = document.querySelector('#delay');
+      let memoryUnitSelect = document.querySelector("#memory_unit");
+
+      containerIdInput.value = containerId;
+      cpuCoresInput.value = cpuCores;
+      memoryLimitInput.value = memoryLimit;
+      packetLossInput.value = packetLoss;
+      bandwidthInput.value = bandwidth;
+      delayInput.value = delay;
+    });
+  });
+
+  $("#edit-bot-form").on("submit", function (e) {
+    e.preventDefault();
+    var formData = $(this).serialize();
+
+    $.ajax({
+      type: "POST",
+      url: "/edit_bot",
+      data: formData,
+      success: function (data) {
+        console.log(data);
+        updateBotCount();
+        reloadPage();
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: " + error);
+      },
+    });
+  });
+
 });
 
 function reloadPage() {

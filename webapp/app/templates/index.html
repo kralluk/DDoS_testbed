@@ -6,80 +6,178 @@
     <script src="/static/attacks.js"></script>
     <script src="/static/victim.js"></script>
 
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"
+    ></script>
+
     <title>Botnet control</title>
   </head>
-  <body>
+  <body class="bg-primary-subtle">
+    <h1>DDoS testbed</h1>
     <!-- BOTNET CONFIG -->
+    <div class="row justify-content-center my-4 mx-3">
+      <div class="col-md-4">
+        <div class="border p-3 bg-light border-black">
+          <form
+            id="generate_botnet_form"
+            method="post"
+            action="/generate_botnet"
+            autocomplete="off"
+          >
+            <h2>Botnet configuration</h2>
+            <div class="form-group row">
+              <label for="bots_number" class="col-sm-4 col-form-label"
+                >Number of bots:</label
+              >
+              <div class="col-sm-3">
+                <input
+                  type="number"
+                  id="bots_number"
+                  name="bots_number"
+                  min="1"
+                  value="5"
+                  class="form-control border-black"
+                />
+              </div>
+            </div>
 
-    <form
-      id="generate_botnet_form"
-      method="post"
-      action="/generate_botnet"
-      autocomplete="off"
-    >
-      <h2>Botnet configuration</h2>
-      <label for="bots_number">Number of bots:</label>
-      <input
-        type="number"
-        id="bots_number"
-        name="bots_number"
-        min="1"
-        value="5"
-      /><br />
+            <br />
 
-      <h3>Resources</h3>
-      <label for="cpu_cores_per_container">CPU cores per container:</label>
-      <input
-        type="number"
-        step="0.1"
-        id="cpu_cores_per_container"
-        name="cpu_cores_per_container"
-        value="1"
-      />
-      <!-- min="1" -->
-      <br />
-      <label for="memory_limit">Memory limitation per container:</label>
-      <input type="number" id="memory_limit" name="memory_limit" value="500" />
-      <!-- min="1" -->
-      <select name="memory_unit">
-        <option value="MB">MB</option>
-        <option value="GB">GB</option></select
-      ><br />
+            <h3>Resources</h3>
+            <label for="cpu_cores_per_container"
+              >CPU cores per container:</label
+            >
+            <input
+              type="number"
+              step="0.1"
+              id="cpu_cores_per_container"
+              name="cpu_cores_per_container"
+              value="1"
+            />
+            <!-- min="1" -->
+            <br />
+            <label for="memory_limit">Memory limitation per container:</label>
+            <input
+              type="number"
+              id="memory_limit"
+              name="memory_limit"
+              value="500"
+            />
+            <!-- min="1" -->
+            <select name="memory_unit">
+              <option value="MB">MB</option>
+              <option value="GB">GB</option></select
+            ><br />
 
-      <h3>Network limitation</h3>
-      <p>Leave blank what you don't to limit</p>
+            <h3>Network limitation</h3>
+            <p>Leave blank what you don't to limit</p>
 
-      <label for="packet_loss">Packet Loss (%):</label>
-      <input type="text" id="packet_loss" name="packet_loss" /><br />
+            <label for="packet_loss">Packet Loss (%):</label>
+            <input type="text" id="packet_loss" name="packet_loss" /><br />
 
-      <label for="bandwidth">Bandwidth:</label>
-      <input type="text" id="bandwidth" name="bandwidth" />
-      <select name="bandwidth_unit">
-        <option value="MB">MB/s</option>
-        <option value="KB">KB/s</option>
-        <option value="GB">GB/s</option>
-      </select>
-      <br />
+            <label for="bandwidth">Bandwidth:</label>
+            <input type="text" id="bandwidth" name="bandwidth" />
+            <select name="bandwidth_unit">
+              <option value="MB">MB/s</option>
+              <option value="KB">KB/s</option>
+              <option value="GB">GB/s</option>
+            </select>
+            <br />
 
-      <label for="delay">Delay (ms):</label>
-      <input type="text" id="delay" name="delay" /><br />
+            <label for="delay">Delay (ms):</label>
+            <input type="text" id="delay" name="delay" /><br />
 
-      <input type="submit" value="Generate Bots" />
-    </form>
-
-    <hr />
-
-    <!-- ATTACK CONFIG -->
-
-    <h2>Attack configuration</h2>
-    <select id="attack_option" autocomplete="off">
-      <option value="" selected>Select an attack</option>
-      <option value="option1" data-form="icmp_flood">ICMP Flood</option>
-      <option value="option2" data-form="slowloris_form">Slowloris</option>
-      <option value="option3" data-form="slow_read_form">Slow Read</option>
-      <!-- <option value="option4" data-form="udp_flood_form">UDP Flood</option> -->
-    </select>
-    <!-- <br />
+            <input type="submit" value="Generate Bots" />
+          </form>
+        </div>
+      </div>
+      <!-- MONITORING -->
+      <div class="col-md-4">
+        <div class="border p-3 bg-light border-black">
+          <h2>Victim server</h2>
+          <ul>
+            <li>Apache version: <span class="apache-version"></span></li>
+            <li>CPU Cores: <span class="victim-cpu-cores"></span></li>
+            <li>
+              Memory Limit: <span class="victim-memory-limit"></span>
+              <span class="victim-memory-unit"></span>
+            </li>
+          </ul>
+          <p><b>Edit victim:</b>.</p>
+          <form id="edit_victim_form" method="post" action="/edit_victim">
+            <label for="apache_version">Apache version:</label>
+            <select id="apache_version" name="apache_version">
+              <option value="2.2.34">2.2.34</option>
+              <option value="2.4.29">2.4.29</option>
+              <option value="2.4.56">2.4.56</option>
+            </select>
+            <br />
+            <label for="victim_cpu_cores">CPU cores:</label>
+            <input
+              type="number"
+              id="victim_cpu_cores"
+              name="victim_cpu_cores"
+              step="0.1"
+              value="1"
+              min="0"
+            /><br />
+            <label for="victim_memory_limit">Memory limitation:</label>
+            <input
+              type="number"
+              id="victim_memory_limit"
+              name="victim_memory_limit"
+              min="1"
+              value="500"
+            />
+            <select id="memory_unit" name="memory_unit">
+              <option value="MB">MB</option>
+              <option value="GB">GB</option></select
+            ><br /><br />
+            <div class="text-center">
+              <input
+                type="submit"
+                value="Edit victim resources"
+                class="btn btn-warning"
+              />
+            </div>
+          </form>
+        </div>
+        <br />
+        <br />
+        <div class="text-center">
+          <button
+            onclick="window.open('http://localhost:3000', '_blank');"
+            class="btn btn-info"
+          >
+            Monitoring
+          </button>
+        </div>
+      </div>
+      <!-- ATTACK CONFIG -->
+      <div class="col-md-4">
+        <div class="border p-3 bg-light border-black">
+          <h2>Attack configuration</h2>
+          <select id="attack_option" autocomplete="off">
+            <option value="" selected>Select an attack</option>
+            <option value="option1" data-form="icmp_flood">ICMP Flood</option>
+            <option value="option2" data-form="slowloris_form">
+              Slowloris
+            </option>
+            <option value="option3" data-form="slow_read_form">
+              Slow Read
+            </option>
+            <!-- <option value="option4" data-form="udp_flood_form">UDP Flood</option> -->
+          </select>
+          <!-- <br />
     <form
       id="udp_flood_form"
       class="option-form"
@@ -115,235 +213,188 @@
 
       <input type="submit" value="Run UDP Flood" />
     </form> -->
-    <br />
-    <form
-      id="icmp_flood"
-      class="option-form"
-      style="display: none"
-      action="/icmp_flood"
-      autocomplete="off"
-    >
-      <label for="attack_duration">Attack duration:</label>
+          <br />
+          <form
+            id="icmp_flood"
+            class="option-form"
+            style="display: none"
+            action="/icmp_flood"
+            autocomplete="off"
+          >
+            <label for="attack_duration">Attack duration:</label>
 
-      <input
-        type="number"
-        id="attack_duration"
-        name="attack_duration"
-        min="1"
-        value="30"
-      />
-      <br />
-      <label for="spoof">Spoof the source address?</label>
-      <select id="spoof_select" name="spoof">
-        <option value="no">No</option>
-        <option value="yes">Yes</option>
-      </select>
-      <div id="ip_address_input" style="display: none">
-        <label for="ip_address">Spoofed IP address:</label>
-        <input
-          type="text"
-          id="ip_address"
-          name="ip_address"
-          placeholder="Enter IP address"
-          value="1.2.3.4"
-        />
+            <input
+              type="number"
+              id="attack_duration"
+              name="attack_duration"
+              min="1"
+              value="30"
+            />
+            <br />
+            <label for="spoof">Spoof the source address?</label>
+            <select id="spoof_select" name="spoof">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+            <div id="ip_address_input" style="display: none">
+              <label for="ip_address">Spoofed IP address:</label>
+              <input
+                type="text"
+                id="ip_address"
+                name="ip_address"
+                placeholder="Enter IP address"
+                value="1.2.3.4"
+              />
+            </div>
+
+            <input type="submit" value="Run ICMP flood" />
+            <!-- <button id="stop_attack">Stop attack</button> -->
+          </form>
+
+          <form
+            id="slowloris_form"
+            action="/slowloris"
+            class="option-form"
+            style="display: none"
+          >
+            <label for="number_of_connections"
+              >Number of connections per bot:</label
+            >
+
+            <input
+              type="number"
+              id="number_of_connections"
+              name="number_of_connections"
+              min="1"
+              value="50"
+            />
+
+            <label for="connection_rate">Connection rate per second:</label>
+
+            <input
+              type="number"
+              id="connection_rate"
+              name="connection_rate"
+              min="1"
+              value="50"
+            />
+            <label for="connection_rate">Attack duration:</label>
+
+            <input
+              type="number"
+              id="attack_duration"
+              name="attack_duration"
+              min="1"
+              value="30"
+            />
+            <input type="submit" value="Run slowloris" />
+          </form>
+
+          <form
+            id="slow_read_form"
+            class="option-form"
+            style="display: none"
+            action="/slow_read"
+          >
+            <label for="number_of_connections"
+              >Number of connections per bot:</label
+            >
+
+            <input
+              type="number"
+              id="number_of_connections"
+              name="number_of_connections"
+              min="1"
+              value="50"
+            />
+            <label for="connection_rate">Connection rate per second:</label>
+
+            <input
+              type="number"
+              id="connection_rate"
+              name="connection_rate"
+              min="1"
+              value="50"
+            />
+            <label for="connection_rate">Attack duration:</label>
+
+            <input
+              type="number"
+              id="attack_duration"
+              name="attack_duration"
+              min="1"
+              value="30"
+            />
+            <label for="pipeline_factor">Pipeline factor:</label>
+
+            <input
+              type="number"
+              id="pipeline_factor"
+              name="pipeline_factor"
+              min="1"
+              value="1"
+            />
+            <label for="read_interval">Interval between read operations</label>
+
+            <input
+              type="number"
+              id="read_interval"
+              name="read_interval"
+              min="1"
+              value="1"
+            />
+
+            <label for="read_bytes">Number of bytes to read:</label>
+
+            <input
+              type="number"
+              id="read_bytes"
+              name="read_bytes"
+              min="1"
+              value="5"
+            />
+            <label for="window_size_start"
+              >Start of the range the TCP advertised window size:</label
+            >
+
+            <input
+              type="number"
+              id="window_size_start"
+              name="window_size_start"
+              min="1"
+              value="1"
+            />
+            <label for="window_size_end"
+              >End of the range the TCP advertised window size:</label
+            >
+
+            <input
+              type="number"
+              id="window_size_end"
+              name="window_size_end"
+              min="1"
+              value="512"
+            />
+            <input type="submit" value="Run Slow Read" />
+          </form>
+        </div>
       </div>
+    </div>
 
-      <input type="submit" value="Run ICMP flood" />
-      <!-- <button id="stop_attack">Stop attack</button> -->
-    </form>
-
-    <form
-      id="slowloris_form"
-      action="/slowloris"
-      class="option-form"
-      style="display: none"
-    >
-      <label for="number_of_connections">Number of connections per bot:</label>
-
-      <input
-        type="number"
-        id="number_of_connections"
-        name="number_of_connections"
-        min="1"
-        value="50"
-      />
-
-      <label for="connection_rate">Connection rate per second:</label>
-
-      <input
-        type="number"
-        id="connection_rate"
-        name="connection_rate"
-        min="1"
-        value="50"
-      />
-      <label for="connection_rate">Attack duration:</label>
-
-      <input
-        type="number"
-        id="attack_duration"
-        name="attack_duration"
-        min="1"
-        value="30"
-      />
-      <input type="submit" value="Run slowloris" />
-    </form>
-
-    <form
-      id="slow_read_form"
-      class="option-form"
-      style="display: none"
-      action="/slow_read"
-    >
-      <label for="number_of_connections">Number of connections per bot:</label>
-
-      <input
-        type="number"
-        id="number_of_connections"
-        name="number_of_connections"
-        min="1"
-        value="50"
-      />
-      <label for="connection_rate">Connection rate per second:</label>
-
-      <input
-        type="number"
-        id="connection_rate"
-        name="connection_rate"
-        min="1"
-        value="50"
-      />
-      <label for="connection_rate">Attack duration:</label>
-
-      <input
-        type="number"
-        id="attack_duration"
-        name="attack_duration"
-        min="1"
-        value="30"
-      />
-      <label for="pipeline_factor">Pipeline factor:</label>
-
-      <input
-        type="number"
-        id="pipeline_factor"
-        name="pipeline_factor"
-        min="1"
-        value="1"
-      />
-      <label for="read_interval">Interval between read operations</label>
-
-      <input
-        type="number"
-        id="read_interval"
-        name="read_interval"
-        min="1"
-        value="1"
-      />
-
-      <label for="read_bytes">Number of bytes to read:</label>
-
-      <input
-        type="number"
-        id="read_bytes"
-        name="read_bytes"
-        min="1"
-        value="5"
-      />
-      <label for="window_size_start"
-        >Start of the range the TCP advertised window size:</label
-      >
-
-      <input
-        type="number"
-        id="window_size_start"
-        name="window_size_start"
-        min="1"
-        value="1"
-      />
-      <label for="window_size_end"
-        >End of the range the TCP advertised window size:</label
-      >
-
-      <input
-        type="number"
-        id="window_size_end"
-        name="window_size_end"
-        min="1"
-        value="512"
-      />
-      <input type="submit" value="Run Slow Read" />
-    </form>
-    <hr />
-
-    <!-- VICTIM CONFIG -->
-
-    <h2>Victim server</h2>
-    <ul>
-      <li>Apache version: <span class="apache-version"></span></li>
-      <li>CPU Cores: <span class="victim-cpu-cores"></span></li>
-      <li>
-        Memory Limit: <span class="victim-memory-limit"></span>
-        <span class="victim-memory-unit"></span>
-      </li>
-    </ul>
-    <p><b>Edit victim:</b>.</p>
-    <form id="edit_victim_form" method="post" action="/edit_victim">
-      <label for="apache_version">Apache version:</label>
-      <select id="apache_version" name="apache_version">
-        <option value="2.2.34">2.2.34</option>
-        <option value="2.4.29">2.4.29</option>
-        <option value="2.4.56">2.4.56</option>
-      </select>
-      <br />
-      <label for="victim_cpu_cores">CPU cores:</label>
-      <input
-        type="number"
-        id="victim_cpu_cores"
-        name="victim_cpu_cores"
-        step="0.1"
-        value="1"
-        min="0"
-      /><br />
-      <label for="victim_memory_limit">Memory limitation:</label>
-      <input
-        type="number"
-        id="victim_memory_limit"
-        name="victim_memory_limit"
-        min="1"
-        value="500"
-      />
-      <select id="memory_unit" name="memory_unit">
-        <option value="MB">MB</option>
-        <option value="GB">GB</option></select
-      ><br /><br />
-
-      <input type="submit" value="Edit victim resources" />
-    </form>
-    <hr />
     <!-- BOTNET INFORMATION  -->
-    <h2>Botnet information</h2>
-    <p>Number of bots: <span id="bot-count"></span></p>
+    <div class="text-center">
+      <h2>Botnet information</h2>
+      <p>Number of bots: <span id="bot-count"></span></p>
 
-    <form action="show_botnet">
-      <input type="submit" value="Show botnet" />
-    </form>
-    <button id="remove_botnet">Remove botnet</button>
-    <form id="limit_network_form" method="post" action="/limit_network"></form>
-    <!-- MONITORING -->
-    <div
-      style="
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 50px;
-        background-color: #f2f2f2;
-      "
-    >
-      <button onclick="window.open('http://localhost:3000', '_blank');">
-        Monitoring
-      </button>
+      <form action="show_botnet">
+        <input type="submit" value="Show botnet" />
+      </form>
+      <button id="remove_botnet">Remove botnet</button>
+      <form
+        id="limit_network_form"
+        method="post"
+        action="/limit_network"
+      ></form>
     </div>
   </body>
 </html>

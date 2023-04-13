@@ -104,7 +104,7 @@ def get_bot_ids():
         bots = conn.execute("SELECT container_id FROM bots").fetchall()
     return bots
 
-def get_bot_data():
+def get_all_bot_data():
     with connect_db() as conn:
         bots = conn.execute("SELECT * FROM bots").fetchall()
     return bots

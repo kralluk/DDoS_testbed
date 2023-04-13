@@ -86,15 +86,15 @@ def slowl_read():
 
 @app.route("/show_botnet")
 def show_botnet():
-    bot_data = db.get_bot_data()
+    bot_data = db.get_all_bot_data()
     return render_template("show_botnet.html", bot_data=bot_data)
 
 
 @app.route("/stop_attack")
 def stop_attack():
     attacks.execute_attack(attacks.stop_attack)
-    return "nothing"
 
+    return "nothing"
 @app.route("/edit_victim", methods=["POST", "GET"])
 def edit_victim():
     apache_version = request.form["apache_version"]
@@ -146,6 +146,33 @@ def edit_all_bots():
     if not resource_check:
         return message
     return bot_management.edit_all_bots(
+        cpu_cores_per_container,
+        memory_limit,
+        memory_unit,
+        packet_loss,
+        bandwidth,
+        bandwidth_unit,
+        delay,
+    )
+
+@app.route("/edit_bot", methods=["POST", "GET"])
+def edit_bot():
+    container_id = request.form["container_id"]
+    cpu_cores_per_container = float(request.form["cpu_cores_per_container"])
+    memory_limit = int(request.form["memory_limit"])
+    memory_unit = request.form["memory_unit"]
+    packet_loss = request.form.get('packet_loss')
+    bandwidth = request.form.get('bandwidth')
+    bandwidth_unit = request.form.get('bandwidth_unit')
+    delay = request.form.get('delay')
+    
+    resource_check, message = resource_utils.check_resources(
+        cpu_cores_per_container, memory_limit, memory_unit
+    )
+    if not resource_check:
+        return message
+    return bot_management.edit_bot(
+        container_id,
         cpu_cores_per_container,
         memory_limit,
         memory_unit,
