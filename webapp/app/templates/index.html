@@ -166,17 +166,7 @@
       <div class="col-md-4">
         <div class="border p-3 bg-light border-black">
           <h2>Attack configuration</h2>
-          <select id="attack_option" autocomplete="off">
-            <option value="" selected>Select an attack</option>
-            <option value="option1" data-form="icmp_flood">ICMP Flood</option>
-            <option value="option2" data-form="slowloris_form">
-              Slowloris
-            </option>
-            <option value="option3" data-form="slow_read_form">
-              Slow Read
-            </option>
-            <!-- <option value="option4" data-form="udp_flood_form">UDP Flood</option> -->
-          </select>
+
           <!-- <br />
     <form
       id="udp_flood_form"
@@ -185,12 +175,12 @@
       action="/udp_flood"
       autocomplete="off"
     >
-      <label for="attack_duration">Attack duration:</label>
+      <label for="attack_attack_duration">Attack attack_duration:</label>
 
       <input
         type="number"
-        id="attack_duration"
-        name="attack_duration"
+        id="attack_attack_duration"
+        name="attack_attack_duration"
         min="1"
         value="30"
       />
@@ -214,19 +204,20 @@
       <input type="submit" value="Run UDP Flood" />
     </form> -->
           <br />
-          <form
+
+          <!-- <form
             id="icmp_flood"
             class="option-form"
             style="display: none"
             action="/icmp_flood"
             autocomplete="off"
           >
-            <label for="attack_duration">Attack duration:</label>
+            <label for="attack_attack_duration">Attack attack_duration:</label>
 
             <input
               type="number"
-              id="attack_duration"
-              name="attack_duration"
+              id="attack_attack_duration"
+              name="attack_attack_duration"
               min="1"
               value="30"
             />
@@ -236,6 +227,7 @@
               <option value="no">No</option>
               <option value="yes">Yes</option>
             </select>
+
             <div id="ip_address_input" style="display: none">
               <label for="ip_address">Spoofed IP address:</label>
               <input
@@ -248,15 +240,135 @@
             </div>
 
             <input type="submit" value="Run ICMP flood" />
-            <!-- <button id="stop_attack">Stop attack</button> -->
+          </form> -->
+          <form
+            id="icmp_flood_form"
+            class="option-form"
+            action="/icmp_flood"
+            autocomplete="off"
+          >
+            <!-- style="display: none" -->
+
+            <h6>ICMP Flood</h6>
+            <div
+              class="modal fade"
+              id="icmpFloodModal"
+              tabindex="-1"
+              aria-labelledby="icmpFloodModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <!-- <form
+                    id="icmp_flood_form"
+                    class="option-form"
+                    action="/icmp_flood"
+                    autocomplete="off"
+                    method="POST"
+                  > -->
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="icmpFloodModalLabel">
+                      ICMP Flood Attack
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <label for="attack_attack_duration"
+                        >Attack attack_duration:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="attack_attack_duration"
+                        name="attack_attack_duration"
+                        min="1"
+                        value="30"
+                        required
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="spoof">Spoof the source address?</label>
+                      <select
+                        id="spoof_select"
+                        name="spoof_select"
+                        class="form-control"
+                      >
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                      </select>
+                    </div>
+                    <div
+                      id="ip_address_input"
+                      style="display: none"
+                      class="form-group"
+                    >
+                      <label for="ip_address">Spoofed IP address:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="ip_address"
+                        name="ip_address"
+                        placeholder="Enter IP address"
+                        value="1.2.3.4"
+                      />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <input
+                      type="submit"
+                      class="btn btn-primary"
+                      value="Submit Configuration"
+                    />
+                    <!-- <button type="submit" class="btn btn-primary">
+                        Run ICMP Flood
+                      </button> -->
+                  </div>
+                  <!-- </form> -->
+                </div>
+              </div>
+            </div>
+            <!-- Button trigger modal -->
+
+            <div id="icmp_flood_bot_count_div">
+              <label for="icmp_flood_bot_count">Bot count:</label>
+              <input
+                type="number"
+                id="icmp_flood_bot_count"
+                name="icmp_flood_bot_count"
+                value="0"
+              />
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#icmpFloodModal"
+            >
+              Configure
+            </button>
           </form>
 
-          <form
+          <!-- <form
             id="slowloris_form"
             action="/slowloris"
             class="option-form"
             style="display: none"
           >
+            <br />
+            <h6>Slowloris</h6>
             <label for="number_of_connections"
               >Number of connections per bot:</label
             >
@@ -278,16 +390,122 @@
               min="1"
               value="50"
             />
-            <label for="connection_rate">Attack duration:</label>
+            <label for="connection_rate">Attack attack_duration:</label>
 
             <input
               type="number"
-              id="attack_duration"
-              name="attack_duration"
+              id="attack_attack_duration"
+              name="attack_attack_duration"
               min="1"
               value="30"
             />
             <input type="submit" value="Run slowloris" />
+          </form> -->
+          <!-- Button trigger modal -->
+
+          <!-- Modal -->
+          <form
+            id="slowloris_form"
+            action="/slowloris"
+            class="option-form"
+            autocomplete="off"
+          >
+            <br />
+            <h6>Slowloris</h6>
+            <div
+              class="modal fade"
+              id="slowlorisModal"
+              tabindex="-1"
+              aria-labelledby="slowlorisModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="slowlorisModalLabel">
+                      Slowloris Attack
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <label for="number_of_connections"
+                        >Number of connections per bot:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="number_of_connections"
+                        name="number_of_connections"
+                        min="1"
+                        value="50"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="connection_rate"
+                        >Connection rate per second:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="connection_rate"
+                        name="connection_rate"
+                        min="1"
+                        value="50"
+                      />
+                    </div>
+                    <!-- <div class="form-group">
+                      <label for="attack_attack_duration">Attack attack_duration:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="attack_attack_duration"
+                        name="attack_attack_duration"
+                        min="1"
+                        value="30"
+                      />
+                    </div> -->
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <input
+                      type="submit"
+                      class="btn btn-primary"
+                      value="Submit Configuration"
+                    />
+                  </div>
+                  <!-- </form> -->
+                </div>
+              </div>
+            </div>
+            <div id="slowloris_bot_count_div">
+              <label for="slowloris_bot_count">Bot count:</label>
+              <input
+                type="number"
+                id="slowloris_bot_count"
+                name="slowloris_bot_count"
+                value="0"
+              />
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#slowlorisModal"
+            >
+              Configure
+            </button>
           </form>
 
           <form
@@ -316,12 +534,12 @@
               min="1"
               value="50"
             />
-            <label for="connection_rate">Attack duration:</label>
+            <label for="connection_rate">Attack attack_duration:</label>
 
             <input
               type="number"
-              id="attack_duration"
-              name="attack_duration"
+              id="attack_attack_duration"
+              name="attack_attack_duration"
               min="1"
               value="30"
             />
@@ -376,6 +594,36 @@
               value="512"
             />
             <input type="submit" value="Run Slow Read" />
+          </form>
+          <hr />
+          <div class="select-form">
+            <select id="attack_option" autocomplete="off">
+              <option value="" selected>Add an attack</option>
+              <option value="option1" data-form="icmp_flood_form">
+                ICMP Flood
+              </option>
+              <option value="option2" data-form="slowloris_form">
+                Slowloris
+              </option>
+              <option value="option3" data-form="slow_read_form">
+                Slow Read
+              </option>
+              <!-- <option value="option4" data-form="udp_flood_form">UDP Flood</option> -->
+            </select>
+          </div>
+
+          <form id="execute_attacks" action="execute_attacks" method="POST">
+            <label for="attack_duration">Attack duration:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="attack_duration"
+              name="attack_duration"
+              min="1"
+              value="30"
+              required
+            />
+            <input type="submit" value="Execute_attacks" />
           </form>
         </div>
       </div>

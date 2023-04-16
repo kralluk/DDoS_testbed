@@ -37,6 +37,71 @@ def create_db():
             )
         """)
 
+        conn.execute("DROP TABLE IF EXISTS icmp_flood")
+        conn.execute("""
+            CREATE TABLE icmp_flood (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ip_address TEXT
+            )
+        """)
+
+        conn.execute("DROP TABLE IF EXISTS slowloris")
+        conn.execute("""
+            CREATE TABLE slowloris (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                number_of_connections INTEGER,
+                connection_rate INTEGER,
+                attack_duration INTEGER
+            )
+        """)
+
+        conn.execute("DROP TABLE IF EXISTS slow_read")
+        conn.execute("""
+            CREATE TABLE slow_read (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                attack_duration INTEGER
+            )
+        """)
+
+def icmp_flood_insert(ip_address):
+    with connect_db() as conn:
+        conn.execute("DELETE FROM icmp_flood")
+        conn.execute("""
+            INSERT INTO icmp_flood (ip_address)
+            VALUES (?)
+        """, (ip_address,))
+
+def slowloris_insert(number_of_connections, connection_rate, attack_duration):
+    with connect_db() as conn:
+        conn.execute("DELETE FROM slowloris")
+        conn.execute("""
+            INSERT INTO slowloris (number_of_connections, connection_rate, attack_duration)
+            VALUES (?, ?, ?)
+        """, (number_of_connections, connection_rate, attack_duration))
+
+def get_attack_args(attack_name):
+    with connect_db() as conn:
+        if attack_name == "icmp_flood":
+            result = conn.execute("SELECT ip_address FROM icmp_flood").fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+        elif attack_name == "slowloris":
+            result = conn.execute("SELECT number_of_connections, connection_rate, attack_duration FROM slowloris").fetchone()
+            if result:
+                return result
+            else:
+                return None
+        else:
+            return None
+
+def change_attack_duration(attack_duration):
+    attacks = ['slowloris', 'slow_read']
+    with connect_db() as conn:
+        for attack in attacks:
+            conn.execute(f"UPDATE {attack} SET attack_duration = ? WHERE id = 1", (attack_duration,))
+
 def victim_insert(apache_version, cpu_cores, memory_limit, memory_unit):
     with connect_db() as conn:
         conn.execute("""
@@ -54,6 +119,7 @@ def victim_update(apache_version, cpu_cores, memory_limit, memory_unit):
                 memory_unit = ?
             WHERE id = 1
         """, (apache_version, cpu_cores, memory_limit, memory_unit))
+
 
 def get_victim_data():
     with connect_db() as conn:

