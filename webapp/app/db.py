@@ -59,9 +59,17 @@ def create_db():
         conn.execute("""
             CREATE TABLE slow_read (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                attack_duration INTEGER
+                number_of_connections INTEGER,
+                connection_rate INTEGER,
+                attack_duration INTEGER,
+                pipeline_factor INTEGER, 
+                read_interval INTEGER,
+                read_bytes INTEGER,
+                window_size_start INTEGER,
+                window_size_end INTEGER
             )
         """)
+        
 
 def icmp_flood_insert(ip_address):
     with connect_db() as conn:
@@ -79,6 +87,14 @@ def slowloris_insert(number_of_connections, connection_rate, attack_duration):
             VALUES (?, ?, ?)
         """, (number_of_connections, connection_rate, attack_duration))
 
+def slow_read_insert(number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end):
+    with connect_db() as conn:
+        conn.execute("DELETE FROM slow_read")
+        conn.execute("""
+            INSERT INTO slow_read (number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end))
+
 def get_attack_args(attack_name):
     with connect_db() as conn:
         if attack_name == "icmp_flood":
@@ -89,6 +105,12 @@ def get_attack_args(attack_name):
                 return None
         elif attack_name == "slowloris":
             result = conn.execute("SELECT number_of_connections, connection_rate, attack_duration FROM slowloris").fetchone()
+            if result:
+                return result
+            else:
+                return None
+        elif attack_name == "slow_read":
+            result = conn.execute("SELECT number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end FROM slow_read").fetchone()
             if result:
                 return result
             else:

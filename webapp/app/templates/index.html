@@ -507,8 +507,172 @@
               Configure
             </button>
           </form>
-
           <form
+            id="slow_read_form"
+            class="option-form"
+            autocomplete="off"
+            action="/slow_read"
+          >
+            <br />
+            <h6>Slow Read</h6>
+            <div
+              class="modal fade"
+              id="slowReadModal"
+              tabindex="-1"
+              aria-labelledby="slowReadModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="slowReadModalLabel">
+                      Slow Read Attack
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <label for="number_of_connections"
+                        >Number of connections per bot:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="number_of_connections"
+                        name="number_of_connections"
+                        min="1"
+                        value="50"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="connection_rate"
+                        >Connection rate per second:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="connection_rate"
+                        name="connection_rate"
+                        min="1"
+                        value="50"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="attack_duration">Attack duration:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="attack_duration"
+                        name="attack_duration"
+                        min="1"
+                        value="30"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="pipeline_factor">Pipeline factor:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="pipeline_factor"
+                        name="pipeline_factor"
+                        min="1"
+                        value="1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="read_interval"
+                        >Interval between read operations:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="read_interval"
+                        name="read_interval"
+                        min="1"
+                        value="1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="read_bytes">Number of bytes to read:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="read_bytes"
+                        name="read_bytes"
+                        min="1"
+                        value="5"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="window_size_start"
+                        >Start of the range of the TCP advertised window
+                        size:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="window_size_start"
+                        name="window_size_start"
+                        min="1"
+                        value="1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="window_size_end"
+                        >End of the range of the TCP advertised window
+                        size:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="window_size_end"
+                        name="window_size_end"
+                        min="1"
+                        value="512"
+                      />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <input
+                      type="submit"
+                      class="btn btn-primary"
+                      value="Submit Configuration"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="slow_read_bot_count_div">
+              <label for="slow_read_bot_count">Bot count:</label>
+              <input
+                type="number"
+                id="slow_read_bot_count"
+                name="slow_read_bot_count"
+                value="0"
+              />
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#slowReadModal"
+            >
+              Configure
+            </button>
+          </form>
+          <!-- <form
             id="slow_read_form"
             class="option-form"
             style="display: none"
@@ -594,7 +758,7 @@
               value="512"
             />
             <input type="submit" value="Run Slow Read" />
-          </form>
+          </form> -->
           <hr />
           <div class="select-form">
             <select id="attack_option" autocomplete="off">

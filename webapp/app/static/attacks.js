@@ -5,7 +5,6 @@ $(document).ready(function () {
     var formData = $(this).serialize();
 
     var attack_duration = $("#attack_duration").val();
-    console.log(attack_duration)
     formData += "&attack_duration=" + attack_duration;
 
 
@@ -28,6 +27,9 @@ $(document).ready(function () {
     e.preventDefault();
     var formData = $(this).serialize();
 
+    var attack_duration = $("#attack_duration").val();
+    formData += "&attack_duration=" + attack_duration;
+
     $.ajax({
       type: "POST",
       url: "/slow_read",
@@ -39,6 +41,7 @@ $(document).ready(function () {
         console.log("Error: " + error);
       },
     });
+    $('#slowReadModal').modal('hide');
   });
 
   $("#icmp_flood_form").on("submit", function (e) {
@@ -108,31 +111,6 @@ $(document).ready(function () {
       }
     });
   
-  // $("#execute_attacks").on("submit", function (e) {
-
-  //   e.preventDefault();
-  //   var formData = $(this).serialize();
-
-  //   var icmp_flood_bot_count = $("#icmp_flood_bot_count").val();
-  //   console.log(icmp_flood_bot_count)
-  //   formData += "&icmp_flood_bot_count=" + icmp_flood_bot_count;
-
-  //   var slowloris_bot_count = $("#slowloris_bot_count").val();
-  //   console.log(slowloris_bot_count)
-  //   formData += "&slowloris_bot_count=" + slowloris_bot_count;
-
-  //   $.ajax({
-  //     type: "POST",
-  //     url: "/execute_attacks",
-  //     data: formData,
-  //     success: function (data) {
-  //       console.log(data);
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.log("Error: " + error);
-  //     },
-  //   });
-  // });
   $("#execute_attacks").on("submit", function (e) {
     e.preventDefault();
   
@@ -148,8 +126,11 @@ $(document).ready(function () {
         formData += "&icmp_flood_bot_count=" + icmp_flood_bot_count;
         var slowloris_bot_count = $("#slowloris_bot_count").val();
         formData += "&slowloris_bot_count=" + slowloris_bot_count;
-  
-        if ((parseInt(icmp_flood_bot_count) + parseInt(slowloris_bot_count)) > bot_count) {
+        var slow_read_bot_count = $("#slow_read_bot_count").val();
+        formData += "&slow_read_bot_count=" + slow_read_bot_count;
+
+        
+        if ((parseInt(icmp_flood_bot_count) + parseInt(slowloris_bot_count) + parseInt(slow_read_bot_count)) > bot_count) {
           alert("Insufficient number of bots");
           return;
         }
