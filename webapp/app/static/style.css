@@ -15,3 +15,18 @@ h1{
 .option-form.active {
   display: block;
 }
+
+.submit_attack {
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.bot-table{
+  margin-left: 90px;
+
+}

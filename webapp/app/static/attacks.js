@@ -95,6 +95,7 @@ $(document).ready(function () {
   
     // Hide all form elements and show the selected form element
     // $(".option-form").hide();
+
     formElement.show();
     $('#attack_option option[value=""]').prop('selected', true);
   });
