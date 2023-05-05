@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -302,7 +302,7 @@
           "refId": "A"
         }
       ],
-      "title": "Apache worker statuses",
+      "title": "Apache Worker Statuses",
       "type": "piechart"
     },
     {
@@ -313,7 +313,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisCenteredZero": false,
@@ -322,15 +322,18 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 20,
-            "gradientMode": "scheme",
+            "fillOpacity": 10,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "lineInterpolation": "smooth",
-            "lineWidth": 3,
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -361,7 +364,38 @@
           },
           "unit": "percent"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{container_label_com_docker_compose_config_hash=\"6edb00f0f154596839356dbf90fe873c6daee216b7deba133fdeaaffdc8a7aef\", container_label_com_docker_compose_container_number=\"1\", container_label_com_docker_compose_oneoff=\"False\", container_label_com_docker_compose_project=\"webapp\", container_label_com_docker_compose_project_config_files=\"docker-compose.yml\", container_label_com_docker_compose_project_working_dir=\"/home/krall/Documents/DDoS_testbed/webapp\", container_label_com_docker_compose_service=\"victim\", container_label_com_docker_compose_version=\"1.29.2\", cpu=\"total\", id=\"/system.slice/docker-491741d8462552f336e9818a433c6214b517b668d3286ee8fbc5e1671c26b9c4.scope\", image=\"httpd:2.2.34\", instance=\"cadvisor:8080\", job=\"cadvisor\", name=\"victim\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{container_label_com_docker_compose_config_hash=\"6edb00f0f154596839356dbf90fe873c6daee216b7deba133fdeaaffdc8a7aef\", container_label_com_docker_compose_container_number=\"1\", container_label_com_docker_compose_oneoff=\"False\", container_label_com_docker_compose_project=\"webapp\", container_label_com_docker_compose_project_config_files=\"docker-compose.yml\", container_label_com_docker_compose_project_working_dir=\"/home/krall/Documents/DDoS_testbed/webapp\", container_label_com_docker_compose_service=\"victim\", container_label_com_docker_compose_version=\"1.29.2\", cpu=\"total\", id=\"/system.slice/docker-f53e79a6a8c84f677a995111440d2ccd1672cc0e51bdda5a24f59585287f9160.scope\", image=\"httpd:2.2.34\", instance=\"cadvisor:8080\", job=\"cadvisor\", name=\"victim\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -369,7 +403,7 @@
         "x": 0,
         "y": 6
       },
-      "id": 16,
+      "id": 26,
       "options": {
         "legend": {
           "calcs": [],
@@ -389,7 +423,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "apache_cpuload{instance=~\"apache_exporter:9117\"} * 100",
+          "expr": "rate(container_cpu_usage_seconds_total{name=\"victim\"}[$interval])* 100",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -415,15 +449,139 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 25,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{__name__=\"container_memory_usage_bytes\", container_label_com_docker_compose_config_hash=\"6edb00f0f154596839356dbf90fe873c6daee216b7deba133fdeaaffdc8a7aef\", container_label_com_docker_compose_container_number=\"1\", container_label_com_docker_compose_oneoff=\"False\", container_label_com_docker_compose_project=\"webapp\", container_label_com_docker_compose_project_config_files=\"docker-compose.yml\", container_label_com_docker_compose_project_working_dir=\"/home/krall/Documents/DDoS_testbed/webapp\", container_label_com_docker_compose_service=\"victim\", container_label_com_docker_compose_version=\"1.29.2\", id=\"/system.slice/docker-491741d8462552f336e9818a433c6214b517b668d3286ee8fbc5e1671c26b9c4.scope\", image=\"httpd:2.2.34\", instance=\"cadvisor:8080\", job=\"cadvisor\", name=\"victim\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{__name__=\"container_memory_usage_bytes\", container_label_com_docker_compose_config_hash=\"6edb00f0f154596839356dbf90fe873c6daee216b7deba133fdeaaffdc8a7aef\", container_label_com_docker_compose_container_number=\"1\", container_label_com_docker_compose_oneoff=\"False\", container_label_com_docker_compose_project=\"webapp\", container_label_com_docker_compose_project_config_files=\"docker-compose.yml\", container_label_com_docker_compose_project_working_dir=\"/home/krall/Documents/DDoS_testbed/webapp\", container_label_com_docker_compose_service=\"victim\", container_label_com_docker_compose_version=\"1.29.2\", id=\"/system.slice/docker-f53e79a6a8c84f677a995111440d2ccd1672cc0e51bdda5a24f59585287f9160.scope\", image=\"httpd:2.2.34\", instance=\"cadvisor:8080\", job=\"cadvisor\", name=\"victim\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "container_memory_usage_bytes{name=\"victim\"}",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Apache Memory Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -459,8 +617,117 @@
       "gridPos": {
         "h": 8,
         "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(container_network_transmit_bytes_total{name=\"victim\"}[$interval])) by (name)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Apache Sent Network Traffic",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "victim"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
         "x": 12,
-        "y": 6
+        "y": 14
       },
       "id": 18,
       "options": {
@@ -488,7 +755,7 @@
           "refId": "A"
         }
       ],
-      "title": "Apache received network traffic",
+      "title": "Apache Received Network Traffic",
       "type": "timeseries"
     },
     {
@@ -508,18 +775,15 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 2,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -556,7 +820,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 22
       },
       "id": 12,
       "options": {
@@ -596,7 +860,7 @@
           "refId": "B"
         }
       ],
-      "title": "Memory usage per bot",
+      "title": "Memory Usage per Bot",
       "type": "timeseries"
     },
     {
@@ -616,15 +880,15 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 25,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -633,7 +897,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -661,7 +925,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 14
+        "y": 22
       },
       "id": 14,
       "options": {
@@ -689,7 +953,7 @@
           "refId": "A"
         }
       ],
-      "title": "Received network traffic per bot",
+      "title": "Received Network Traffic per Bot",
       "type": "timeseries"
     },
     {
@@ -709,15 +973,15 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 25,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -726,7 +990,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -745,7 +1009,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "Bps"
         },
         "overrides": []
       },
@@ -753,7 +1018,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 22
+        "y": 30
       },
       "id": 20,
       "options": {
@@ -801,15 +1066,15 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 25,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -818,7 +1083,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -837,7 +1102,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -845,7 +1111,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 22
+        "y": 30
       },
       "id": 22,
       "options": {
@@ -1017,9 +1283,9 @@
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "",
-  "title": "Impact of attacks",
-  "uid": "wRPD_Ms4k",
-  "version": 3,
+  "timezone": "Europe/Prague",
+  "title": "Impact of attacks Copy",
+  "uid": "IPUfV8yVz",
+  "version": 1,
   "weekStart": ""
 }

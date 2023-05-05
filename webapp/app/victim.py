@@ -20,7 +20,7 @@ def edit_victim(apache_version, victim_cpu_cores, victim_memory_limit, memory_un
 
 def get_victim_config(apache_version, actual_apache_version, cpu_cores, memory_limit_bytes):
     if("httpd:"+apache_version != actual_apache_version):
-        httpd_conf_path = os.path.abspath(f"./provisioning/httpd_{apache_version}.conf")
+        httpd_conf_path = os.path.abspath(f"./httpd_{apache_version}.conf")
         victim_config = {
             "name": "victim",
             "image": "httpd:"+apache_version,
