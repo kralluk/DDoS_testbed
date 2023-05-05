@@ -59,7 +59,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./httpd_2.2.34.conf:/usr/local/apache2/conf/httpd.conf
+      - ./apache_configs/httpd_2.2.34.conf:/usr/local/apache2/conf/httpd.conf
     restart: always
   apache_exporter:
     image: lusotycoon/apache-exporter

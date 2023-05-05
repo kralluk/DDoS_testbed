@@ -368,7 +368,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "{container_label_com_docker_compose_config_hash=\"6edb00f0f154596839356dbf90fe873c6daee216b7deba133fdeaaffdc8a7aef\", container_label_com_docker_compose_container_number=\"1\", container_label_com_docker_compose_oneoff=\"False\", container_label_com_docker_compose_project=\"webapp\", container_label_com_docker_compose_project_config_files=\"docker-compose.yml\", container_label_com_docker_compose_project_working_dir=\"/home/krall/Documents/DDoS_testbed/webapp\", container_label_com_docker_compose_service=\"victim\", container_label_com_docker_compose_version=\"1.29.2\", cpu=\"total\", id=\"/system.slice/docker-491741d8462552f336e9818a433c6214b517b668d3286ee8fbc5e1671c26b9c4.scope\", image=\"httpd:2.2.34\", instance=\"cadvisor:8080\", job=\"cadvisor\", name=\"victim\"}"
+              "options": "Value"
             },
             "properties": [
               {
@@ -377,21 +377,10 @@
                   "fixedColor": "light-red",
                   "mode": "fixed"
                 }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{container_label_com_docker_compose_config_hash=\"6edb00f0f154596839356dbf90fe873c6daee216b7deba133fdeaaffdc8a7aef\", container_label_com_docker_compose_container_number=\"1\", container_label_com_docker_compose_oneoff=\"False\", container_label_com_docker_compose_project=\"webapp\", container_label_com_docker_compose_project_config_files=\"docker-compose.yml\", container_label_com_docker_compose_project_working_dir=\"/home/krall/Documents/DDoS_testbed/webapp\", container_label_com_docker_compose_service=\"victim\", container_label_com_docker_compose_version=\"1.29.2\", cpu=\"total\", id=\"/system.slice/docker-f53e79a6a8c84f677a995111440d2ccd1672cc0e51bdda5a24f59585287f9160.scope\", image=\"httpd:2.2.34\", instance=\"cadvisor:8080\", job=\"cadvisor\", name=\"victim\"}"
-            },
-            "properties": [
+              },
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-red",
-                  "mode": "fixed"
-                }
+                "id": "displayName",
+                "value": "victim"
               }
             ]
           }
@@ -492,7 +481,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "{__name__=\"container_memory_usage_bytes\", container_label_com_docker_compose_config_hash=\"6edb00f0f154596839356dbf90fe873c6daee216b7deba133fdeaaffdc8a7aef\", container_label_com_docker_compose_container_number=\"1\", container_label_com_docker_compose_oneoff=\"False\", container_label_com_docker_compose_project=\"webapp\", container_label_com_docker_compose_project_config_files=\"docker-compose.yml\", container_label_com_docker_compose_project_working_dir=\"/home/krall/Documents/DDoS_testbed/webapp\", container_label_com_docker_compose_service=\"victim\", container_label_com_docker_compose_version=\"1.29.2\", id=\"/system.slice/docker-491741d8462552f336e9818a433c6214b517b668d3286ee8fbc5e1671c26b9c4.scope\", image=\"httpd:2.2.34\", instance=\"cadvisor:8080\", job=\"cadvisor\", name=\"victim\"}"
+              "options": "Value"
             },
             "properties": [
               {
@@ -501,21 +490,10 @@
                   "fixedColor": "light-orange",
                   "mode": "fixed"
                 }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"container_memory_usage_bytes\", container_label_com_docker_compose_config_hash=\"6edb00f0f154596839356dbf90fe873c6daee216b7deba133fdeaaffdc8a7aef\", container_label_com_docker_compose_container_number=\"1\", container_label_com_docker_compose_oneoff=\"False\", container_label_com_docker_compose_project=\"webapp\", container_label_com_docker_compose_project_config_files=\"docker-compose.yml\", container_label_com_docker_compose_project_working_dir=\"/home/krall/Documents/DDoS_testbed/webapp\", container_label_com_docker_compose_service=\"victim\", container_label_com_docker_compose_version=\"1.29.2\", id=\"/system.slice/docker-f53e79a6a8c84f677a995111440d2ccd1672cc0e51bdda5a24f59585287f9160.scope\", image=\"httpd:2.2.34\", instance=\"cadvisor:8080\", job=\"cadvisor\", name=\"victim\"}"
-            },
-            "properties": [
+              },
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-orange",
-                  "mode": "fixed"
-                }
+                "id": "displayName",
+                "value": "victim"
               }
             ]
           }

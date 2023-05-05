@@ -78,10 +78,7 @@ def slowl_read():
     window_size_start = int(request.form["window_size_start"])
     window_size_end = int(request.form["window_size_end"])
     db.slow_read_insert(number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end)
-    
-    # attacks.execute_attack(
-    #     attacks.slow_read, attack_duration, number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end
-    # )
+ 
     return "nothing"
 
 
