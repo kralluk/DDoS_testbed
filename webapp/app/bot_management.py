@@ -98,6 +98,17 @@ def remove_botnet():
     db.remove_bots()
     return "nothing"
 
+def remove_bot(container_id):
+    try:
+        container = client.containers.get(container_id)
+        container.kill()
+        container.remove()
+    except docker.errors.DockerException as ex:
+        print("Error")
+    db.remove_bot(container_id)
+    return "nothing"
+
+
 def get_tc_command(packet_loss, bandwidth, bandwidth_unit, delay):
     tc_command = 'tc qdisc add dev eth0 root netem'
     if packet_loss: 

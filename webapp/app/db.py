@@ -186,7 +186,11 @@ def remove_bots():
         conn.execute("DELETE FROM bots")
         conn.commit()
 
-
+def remove_bot(container_id):
+    with connect_db() as conn:
+        conn.execute("DELETE FROM bots WHERE container_id=?", (container_id,))
+        conn.commit()
+        
 def get_bot_ids():
     with connect_db() as conn:
         bots = conn.execute("SELECT container_id FROM bots").fetchall()

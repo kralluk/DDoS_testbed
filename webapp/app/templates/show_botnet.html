@@ -51,14 +51,6 @@
                 </td>
                 <td style="text-align: center">{{ bot['delay'] }}</td>
                 <td>
-                  <!-- <button
-                  class="edit-bot btn btn-primary"
-                  data-id="{{ bot['container_id'] }}"
-                  data-bs-toggle="modal"
-                  data-bs-target="#edit-modal"
-                >
-                  Edit
-                </button> -->
                   <button
                     class="edit-bot btn btn-outline-secondary"
                     data-id="{{ bot['container_id'] }},{{ bot['cpu_cores'] }},{{ bot['memory_limit'] }}, {{ bot['memory_unit'] }}, {{ bot['packet_loss'] }},{{ bot['bandwidth'] }},{{ bot['bandwidth_unit'] }},{{ bot['delay'] }}"
@@ -66,6 +58,12 @@
                     data-bs-target="#edit-modal"
                   >
                     Edit
+                  </button>
+                  <button
+                    class="delete-bot btn btn-outline-secondary"
+                    data-id="{{ bot['container_id'] }}"
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>

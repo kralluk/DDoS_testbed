@@ -49,7 +49,6 @@ $(document).ready(function () {
       success: function (data) {
         console.log(data);
         updateBotCount(); // updating bot count after removing
-        // alert("Botnet was removed");
         reloadPage();
         
       },
@@ -91,6 +90,28 @@ $(document).ready(function () {
     });
   }
   
+  var del_buttons = document.querySelectorAll('.delete-bot'); 
+  del_buttons.forEach(function(button) { 
+    button.addEventListener('click', function(e) {
+      var botData = button.getAttribute('data-id');
+      console.log("hej")
+      e.preventDefault();
+
+      $.ajax({
+        type: "POST",
+        url: "/remove_bot",
+        data: { "container_id": botData },
+        success: function(response) {
+          updateBotCount();
+          reloadPage();
+        },
+        error: function(xhr, status, error) {
+          console.log("Error: " + error);
+        }
+      });
+  });
+  });
+
 
   var buttons = document.querySelectorAll('.edit-bot'); 
   buttons.forEach(function(button) { 
