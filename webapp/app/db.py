@@ -71,7 +71,7 @@ def create_db():
         """)
         
 
-def icmp_flood_insert(ip_address):
+def icmp_flood_insert(ip_address=None):
     with connect_db() as conn:
         conn.execute("DELETE FROM icmp_flood")
         conn.execute("""
@@ -100,7 +100,7 @@ def get_attack_args(attack_name):
         if attack_name == "icmp_flood":
             result = conn.execute("SELECT ip_address FROM icmp_flood").fetchone()
             if result:
-                return result[0]
+                return result
             else:
                 return None
         elif attack_name == "slowloris":

@@ -41,31 +41,6 @@ def slow_read(container_id, attack_duration, number_of_connections, connection_r
     )
     print(result.output.decode())
 
-def execute_attack(attack, duration, *args): 
-    container_ids = [x[0] for x in db.get_bot_ids()]
-    threads = [
-        threading.Thread(target=attack, args=(container_id, *args))
-        for container_id in container_ids
-    ]
-
-    # Start all threads
-    for thread in threads:
-        thread.start()
-
-    if attack.__name__ == "icmp_flood":
-        # Wait for the specified duration
-        time.sleep(duration)
-
-        # Stop icmp flood after duration
-        for container_id in container_ids:
-            threading.Thread(target=stop_attack, args=(container_id,)).start()
-    
-    # Wait for all threads to finish
-    for thread in threads:
-        thread.join()
-
-    return "Attack finished"
-
 def stop_attack(container_id):
     container = client.containers.get(container_id)
     result = container.exec_run("pkill hping3")
@@ -96,6 +71,7 @@ def execute_attacks(attack_info, attack_duration):
         containers = attack_containers[attack]
         results = db.get_attack_args(attack)
         args = []
+     
         if results is not None:
             for result in results:
                 args.append(result)

@@ -265,7 +265,7 @@
 
           <br />
 
-          <form id="icmp_flood_form" action="/icmp_flood" autocomplete="off">
+          <form id="icmp_flood_form" action="/icmp_flood">
             <p><b>ICMP Flood</b></p>
             <!-- <h5>ICMP Flood</h5> -->
             <div
@@ -378,7 +378,7 @@
             </div>
           </form>
 
-          <form id="slowloris_form" action="/slowloris" autocomplete="off">
+          <form id="slowloris_form" action="/slowloris">
             <br />
             <p><b>Slowloris</b></p>
 
@@ -479,16 +479,9 @@
               <!-- </div> -->
             </div>
           </form>
-          <form id="slow_read_form" autocomplete="off" action="/slow_read">
-            <!-- <form
-            id="slow_read_form"
-            class="option-form"
-            autocomplete="off"
-            action="/slow_read"
-          > -->
+          <form id="slow_read_form" action="/slow_read">
             <br />
             <p><b>Slow Read</b></p>
-            <!-- <h6>Slow Read</h6> -->
             <div
               class="modal fade"
               id="slowReadModal"
@@ -545,6 +538,7 @@
                         name="pipeline_factor"
                         min="1"
                         value="1"
+                        max="10"
                       />
                     </div>
                     <div class="form-group">
@@ -617,27 +611,8 @@
                 </div>
               </div>
             </div>
-            <!-- <div id="slowl_read_bot_controls">
-              <div id="slow_read_bot_count_div" style="display: inline-block">
-                <label for="slow_read_bot_count">Bot count:</label>
-                <input
-                  type="number"
-                  id="slow_read_bot_count"
-                  name="slow_read_bot_count"
-                  value="0"
-                />
-              </div>
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#slowReadModal"
-              >
-                Configure
-              </button>
-            </div> -->
+
             <div class="input-group">
-              <!-- <div id="icmp_flood_bot_controls"> -->
               <div class="col-sm-3">
                 <label class="form-label" for="slow_read_bot_count"
                   >Bot count:</label

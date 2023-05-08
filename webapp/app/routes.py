@@ -54,15 +54,9 @@ def icmp_flood():
     if(spoof == "yes"):
         ip_address = request.form["ip_address"]
         db.icmp_flood_insert(ip_address)
+    else:
+        db.icmp_flood_insert()
     return "nothing"
-
-# @app.route("/udp_flood", methods=["POST", "GET"])
-# def udp_flood():
-#     ip_address = request.form["ip_address"]
-#     duration = int(request.form["attack_duration"])
-#     attacks.execute_attack(attacks.udp_flood, duration, ip_address)
-#     return "nothing"
-
 
 @app.route("/slowloris", methods=["POST"])
 def slowloris():
