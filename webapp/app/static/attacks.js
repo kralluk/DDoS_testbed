@@ -102,16 +102,28 @@ $(document).ready(function () {
 
   
   document
-    .getElementById("spoof_select")
-    .addEventListener("change", function () {
+    .getElementById("icmpConfigure")
+    .addEventListener("click", function () {
+      var spoof_select = document.getElementById("spoof_select");
       var inputDiv = document.getElementById("ip_address_input");
-      if (this.value === "yes") {
+      if (spoof_select.value === "yes") {
         inputDiv.style.display = "block";
       } else {
         inputDiv.style.display = "none";
       }
     });
   
+  document
+  .getElementById("spoof_select")
+  .addEventListener("change", function () {
+    var inputDiv = document.getElementById("ip_address_input");
+    if (this.value === "yes") {
+      inputDiv.style.display = "block";
+    } else {
+      inputDiv.style.display = "none";
+    }
+  });
+
   $("#execute_attacks").on("submit", function (e) {
     e.preventDefault();
   

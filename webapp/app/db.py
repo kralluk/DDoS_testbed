@@ -41,6 +41,7 @@ def create_db():
         conn.execute("""
             CREATE TABLE icmp_flood (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                spoof_select TEXT,
                 ip_address TEXT
             )
         """)
@@ -71,13 +72,13 @@ def create_db():
         """)
         
 
-def icmp_flood_insert(ip_address=None):
+def icmp_flood_insert(spoof_select, ip_address=""):
     with connect_db() as conn:
         conn.execute("DELETE FROM icmp_flood")
         conn.execute("""
-            INSERT INTO icmp_flood (ip_address)
-            VALUES (?)
-        """, (ip_address,))
+            INSERT INTO icmp_flood (spoof_select, ip_address)
+            VALUES (?,?)
+        """, (spoof_select, ip_address,))
 
 def slowloris_insert(number_of_connections, connection_rate, attack_duration):
     with connect_db() as conn:
@@ -99,6 +100,12 @@ def get_attack_args(attack_name):
     with connect_db() as conn:
         if attack_name == "icmp_flood":
             result = conn.execute("SELECT ip_address FROM icmp_flood").fetchone()
+            if result:
+                return result
+            else:
+                return None
+        elif attack_name == "icmp_flood_full":
+            result = conn.execute("SELECT spoof_select, ip_address FROM icmp_flood").fetchone()
             if result:
                 return result
             else:

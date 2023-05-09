@@ -265,7 +265,7 @@
 
           <br />
 
-          <form id="icmp_flood_form" action="/icmp_flood">
+          <form id="icmp_flood_form" action="/icmp_flood" autocomplete="off">
             <p><b>ICMP Flood</b></p>
             <!-- <h5>ICMP Flood</h5> -->
             <div
@@ -290,28 +290,19 @@
                   </div>
                   <div class="modal-body">
                     <div class="form-group">
-                      <label for="attack_attack_duration"
-                        >Attack attack_duration:</label
-                      >
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="attack_attack_duration"
-                        name="attack_attack_duration"
-                        min="1"
-                        value="30"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
                       <label for="spoof">Spoof the source address?</label>
                       <select
                         id="spoof_select"
                         name="spoof_select"
                         class="form-control"
                       >
-                        <option value="no">No</option>
+                        {% if icmp_flood_data['spoof_select'] == 'no' %}
+                        <option value="no" selected>No</option>
                         <option value="yes">Yes</option>
+                        {% else %}
+                        <option value="no">No</option>
+                        <option value="yes" selected>Yes</option>
+                        {% endif %}
                       </select>
                     </div>
                     <div
@@ -326,7 +317,7 @@
                         id="ip_address"
                         name="ip_address"
                         placeholder="Enter IP address"
-                        value="1.2.3.4"
+                        value="{{ icmp_flood_data['ip_address'] }}"
                       />
                     </div>
                   </div>
@@ -370,6 +361,7 @@
                   class="btn btn-outline-secondary"
                   data-bs-toggle="modal"
                   data-bs-target="#icmpFloodModal"
+                  id="icmpConfigure"
                 >
                   Configure
                 </button>
@@ -414,7 +406,7 @@
                         id="number_of_connections"
                         name="number_of_connections"
                         min="1"
-                        value="50"
+                        value="{{ slowloris_data['number_of_connections'] }}"
                       />
                     </div>
                     <div class="form-group">
@@ -427,7 +419,7 @@
                         id="connection_rate"
                         name="connection_rate"
                         min="1"
-                        value="50"
+                        value="{{ slowloris_data['connection_rate'] }}"
                       />
                     </div>
                   </div>
@@ -513,7 +505,7 @@
                         id="number_of_connections"
                         name="number_of_connections"
                         min="1"
-                        value="50"
+                        value="{{ slow_read_data['number_of_connections'] }}"
                       />
                     </div>
                     <div class="form-group">
@@ -526,7 +518,7 @@
                         id="connection_rate"
                         name="connection_rate"
                         min="1"
-                        value="50"
+                        value="{{ slow_read_data['connection_rate'] }}"
                       />
                     </div>
                     <div class="form-group">
@@ -537,7 +529,7 @@
                         id="pipeline_factor"
                         name="pipeline_factor"
                         min="1"
-                        value="1"
+                        value="{{ slow_read_data['pipeline_factor'] }}"
                         max="10"
                       />
                     </div>
@@ -551,7 +543,7 @@
                         id="read_interval"
                         name="read_interval"
                         min="1"
-                        value="1"
+                        value="{{ slow_read_data['read_interval'] }}"
                       />
                     </div>
                     <div class="form-group">
@@ -562,7 +554,7 @@
                         id="read_bytes"
                         name="read_bytes"
                         min="1"
-                        value="5"
+                        value="{{ slow_read_data['read_bytes'] }}"
                       />
                     </div>
                     <div class="form-group">
@@ -576,7 +568,7 @@
                         id="window_size_start"
                         name="window_size_start"
                         min="1"
-                        value="1"
+                        value="{{ slow_read_data['window_size_start'] }}"
                       />
                     </div>
                     <div class="form-group">
@@ -590,7 +582,7 @@
                         id="window_size_end"
                         name="window_size_end"
                         min="1"
-                        value="512"
+                        value="{{ slow_read_data['window_size_end'] }}"
                       />
                     </div>
                   </div>

