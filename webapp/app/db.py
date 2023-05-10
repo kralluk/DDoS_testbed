@@ -40,7 +40,7 @@ def create_db():
         conn.execute("DROP TABLE IF EXISTS icmp_flood")
         conn.execute("""
             CREATE TABLE icmp_flood (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY,
                 spoof_select TEXT,
                 ip_address TEXT
             )
@@ -49,7 +49,7 @@ def create_db():
         conn.execute("DROP TABLE IF EXISTS slowloris")
         conn.execute("""
             CREATE TABLE slowloris (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY,
                 number_of_connections INTEGER,
                 connection_rate INTEGER,
                 attack_duration INTEGER
@@ -59,11 +59,11 @@ def create_db():
         conn.execute("DROP TABLE IF EXISTS slow_read")
         conn.execute("""
             CREATE TABLE slow_read (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY,
                 number_of_connections INTEGER,
                 connection_rate INTEGER,
                 attack_duration INTEGER,
-                pipeline_factor INTEGER, 
+                request_multiplier INTEGER, 
                 read_interval INTEGER,
                 read_bytes INTEGER,
                 window_size_start INTEGER,
@@ -88,13 +88,13 @@ def slowloris_insert(number_of_connections, connection_rate, attack_duration):
             VALUES (?, ?, ?)
         """, (number_of_connections, connection_rate, attack_duration))
 
-def slow_read_insert(number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end):
+def slow_read_insert(number_of_connections, connection_rate, attack_duration, request_multiplier, read_interval, read_bytes, window_size_start, window_size_end):
     with connect_db() as conn:
         conn.execute("DELETE FROM slow_read")
         conn.execute("""
-            INSERT INTO slow_read (number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end)
+            INSERT INTO slow_read (number_of_connections, connection_rate, attack_duration, request_multiplier, read_interval, read_bytes, window_size_start, window_size_end)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end))
+        """, (number_of_connections, connection_rate, attack_duration, request_multiplier, read_interval, read_bytes, window_size_start, window_size_end))
 
 def get_attack_args(attack_name):
     with connect_db() as conn:
@@ -117,7 +117,7 @@ def get_attack_args(attack_name):
             else:
                 return None
         elif attack_name == "slow_read":
-            result = conn.execute("SELECT number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end FROM slow_read").fetchone()
+            result = conn.execute("SELECT number_of_connections, connection_rate, attack_duration, request_multiplier, read_interval, read_bytes, window_size_start, window_size_end FROM slow_read").fetchone()
             if result:
                 return result
             else:

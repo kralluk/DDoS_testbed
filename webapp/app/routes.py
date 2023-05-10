@@ -74,12 +74,12 @@ def slowl_read():
     number_of_connections = int(request.form["number_of_connections"])
     connection_rate = int(request.form["connection_rate"])
     attack_duration = int(request.form["attack_duration"])
-    pipeline_factor = int(request.form["pipeline_factor"])
+    request_multiplier = int(request.form["request_multiplier"])
     read_interval = int(request.form["read_interval"])
     read_bytes = int(request.form["read_bytes"])
     window_size_start = int(request.form["window_size_start"])
     window_size_end = int(request.form["window_size_end"])
-    db.slow_read_insert(number_of_connections, connection_rate, attack_duration, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end)
+    db.slow_read_insert(number_of_connections, connection_rate, attack_duration, request_multiplier, read_interval, read_bytes, window_size_start, window_size_end)
  
     return "nothing"
 

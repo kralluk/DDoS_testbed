@@ -55,7 +55,6 @@ services:
     cpu_quota: 100000
     mem_limit: 500m
     memswap_limit: 500m
-    
     ports:
       - "80:80"
     volumes:

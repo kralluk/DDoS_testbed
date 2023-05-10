@@ -370,7 +370,7 @@
             </div>
           </form>
 
-          <form id="slowloris_form" action="/slowloris">
+          <form id="slowloris_form" action="/slowloris" autocomplete="off">
             <br />
             <p><b>Slowloris</b></p>
 
@@ -471,7 +471,7 @@
               <!-- </div> -->
             </div>
           </form>
-          <form id="slow_read_form" action="/slow_read">
+          <form id="slow_read_form" action="/slow_read" autocomplete="off">
             <br />
             <p><b>Slow Read</b></p>
             <div
@@ -522,14 +522,16 @@
                       />
                     </div>
                     <div class="form-group">
-                      <label for="pipeline_factor">Pipeline factor:</label>
+                      <label for="request_multiplier"
+                        >Connection request multiplier:</label
+                      >
                       <input
                         type="number"
                         class="form-control"
-                        id="pipeline_factor"
-                        name="pipeline_factor"
+                        id="request_multiplier"
+                        name="request_multiplier"
                         min="1"
-                        value="{{ slow_read_data['pipeline_factor'] }}"
+                        value="{{ slow_read_data['request_multiplier'] }}"
                         max="10"
                       />
                     </div>
@@ -634,20 +636,6 @@
           </form>
 
           <hr />
-          <!-- <div class="select-form">
-            <select id="attack_option" autocomplete="off">
-              <option value="" selected>Add an attack</option>
-              <option value="option1" data-form="icmp_flood_form">
-                ICMP Flood
-              </option>
-              <option value="option2" data-form="slowloris_form">
-                Slowloris
-              </option>
-              <option value="option3" data-form="slow_read_form">
-                Slow Read
-              </option>
-            </select>
-          </div> -->
 
           <form id="execute_attacks" action="execute_attacks" method="POST">
             <label for="attack_duration">Attack duration (s):</label>
