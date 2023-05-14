@@ -260,7 +260,7 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 9,
+        "w": 10,
         "x": 14,
         "y": 0
       },
@@ -412,7 +412,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(container_cpu_usage_seconds_total{name=\"victim\"}[$interval])* 100",
+          "expr": "(sum(rate(container_cpu_usage_seconds_total{name=\"victim\"}[$interval])) by (name) /\nsum(container_spec_cpu_quota{name=\"victim\"}/container_spec_cpu_period{name=\"victim\"}) by (name))* 100",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -781,8 +781,99 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 22
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "\n(sum(rate(container_cpu_usage_seconds_total{image=\"kralluk/ubuntu_for_ddos:v1.2\"}[$interval])) by (name) /\nsum(container_spec_cpu_quota{image=\"kralluk/ubuntu_for_ddos:v1.2\"}/container_spec_cpu_period{image=\"kralluk/ubuntu_for_ddos:v1.2\"}) by (name))* 100",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Usage per Bot",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
               },
               {
                 "color": "red",
@@ -797,7 +888,7 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 22
       },
       "id": 12,
@@ -886,101 +977,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "Bps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 22
-      },
-      "id": 14,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(container_network_receive_bytes_total{image=\"kralluk/ubuntu_for_ddos:v1.2\"}[$interval])) by (name)",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Received Network Traffic per Bot",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1072,8 +1069,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1081,7 +1077,7 @@
               }
             ]
           },
-          "unit": "percent"
+          "unit": "Bps"
         },
         "overrides": []
       },
@@ -1091,7 +1087,7 @@
         "x": 12,
         "y": 30
       },
-      "id": 22,
+      "id": 14,
       "options": {
         "legend": {
           "calcs": [],
@@ -1111,13 +1107,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{image=\"kralluk/ubuntu_for_ddos:v1.2\"}[$interval])) by (name) * 100",
+          "expr": "sum(rate(container_network_receive_bytes_total{image=\"kralluk/ubuntu_for_ddos:v1.2\"}[$interval])) by (name)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage per Bot",
+      "title": "Received Network Traffic per Bot",
       "type": "timeseries"
     }
   ],
@@ -1262,8 +1258,8 @@
   },
   "timepicker": {},
   "timezone": "Europe/Prague",
-  "title": "Impact of attacks Copy",
-  "uid": "IPUfV8yVz",
-  "version": 1,
+  "title": "Impact of attacks",
+  "uid": "C05OBA84k",
+  "version": 2,
   "weekStart": ""
 }
