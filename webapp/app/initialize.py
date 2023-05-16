@@ -1,7 +1,7 @@
 # This module provides processes at the beginning and end of the program run
 
 from app import db, bot_management, victim
-import docker, subprocess, atexit, os
+import docker, subprocess, atexit, os, socket, resource
 from .settings import client
 
 
@@ -10,6 +10,12 @@ def before_first_request_funcs(app):
     def run_docker_compose():
         os.chdir("configurations")
         subprocess.run(["docker-compose", "up", "-d"])
+
+    @app.before_first_request
+    def set_resource_limit():
+        soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+        if soft < 5000:
+            resource.setrlimit(resource.RLIMIT_NOFILE, (5000, hard))
 
     @app.before_first_request
     def create_db():

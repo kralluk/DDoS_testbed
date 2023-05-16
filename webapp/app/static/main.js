@@ -107,10 +107,7 @@ $(document).ready(function () {
         },
         error: function(xhr, status, error) {
           console.log("Error: " + error);
-        }
-      });
-  });
-  });
+        } }); }); });
 
 
   var buttons = document.querySelectorAll('.edit-bot'); 
@@ -129,8 +126,6 @@ $(document).ready(function () {
 
       const form = document.querySelector('#edit-bot-form');
 
-      // document.addEventListener("DOMContentLoaded", function() {
-      
       const containerIdInput = document.querySelector('#container_id');
       const cpuCoresInput = document.querySelector('#cpu_cores_per_container');
       const memoryLimitInput = document.querySelector('#memory_limit');

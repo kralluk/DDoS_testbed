@@ -1,7 +1,10 @@
-import docker, threading, sqlite3, time
+import docker, threading, sqlite3, time, multiprocessing
 from flask import request
 from .settings import client
 from app import db
+from multiprocessing import Pool
+from concurrent.futures import ThreadPoolExecutor
+
 
 
 def icmp_flood(container_id, ip_address=""):
@@ -75,6 +78,10 @@ def execute_attacks(attack_info, attack_duration):
 
     # Wait for all threads to finish
     for attack_thread in attack_threads:
-        attack_thread.join()
+        attack_thread.join(timeout=attack_duration+10)
 
     return "Attacks finished"
+
+def run_attack(attack_function, container_id, *args):
+    container = client.containers.get(container_id)
+    attack_function(container_id, *args)
