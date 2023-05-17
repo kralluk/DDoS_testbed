@@ -525,7 +525,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "container_memory_usage_bytes{name=\"victim\"} and container_last_seen{name=\"victim\"} > (time() - 10)",
+          "expr": "container_memory_usage_bytes{name=\"victim\"} and container_last_seen{name=\"victim\"} > (time() - 20)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"

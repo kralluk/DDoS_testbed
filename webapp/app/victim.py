@@ -29,6 +29,9 @@ def get_victim_config(apache_version, actual_apache_version, cpu_cores, memory_l
             "memswap_limit": memory_limit_bytes,
             "cpu_period": 100000,
             "cpu_quota": int(cpu_cores * 100000),
+            "restart_policy": {
+                "Name": "always"
+            },
             "ports": {
                 "80/tcp": 80
             },
@@ -49,13 +52,11 @@ def get_victim_config(apache_version, actual_apache_version, cpu_cores, memory_l
     return victim_config
 
 def remove():
-    victim = client.containers.get("victim") 
     try:
-        victim.kill()
-        victim.wait()
-    except docker.errors.NotFound:
-        pass
-    try:
+        victim = client.containers.get("victim")
+        if victim.status == "running":
+            victim.kill()
+            victim.wait()
         victim.remove()
         victim.wait()
     except docker.errors.NotFound:
