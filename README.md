@@ -27,7 +27,7 @@ python3 -m pip install -r requirements.txt
 ```
 - Start the app
 ```
-flask run   # If you want the app to be accessible from other devices on the network -> flask run --host=0.0.0.0
+flask run  # If you want the app to be accessible from other devices on the network -> flask run --host=0.0.0.0
 ```
 - App is running on http://localhost:5000 
 
