@@ -20,10 +20,13 @@ def before_first_request_funcs(app):
     @app.before_first_request
     def create_db():
         db.create_db()
-        db.victim_insert('2.2.34', 1, 500, 'MB') # inserting default victim resources specified in docker-compose.yaml to db
-        db.icmp_flood_insert('no')
-        db.slowloris_insert(50,50,30)
-        db.slow_read_insert(50,50,30,1,1,5,1,512)
+        db.victim_insert(
+            "2.2.34", 1, 500, "MB"
+        )  # inserting default victim resources specified in docker-compose.yaml to db
+        db.icmp_flood_insert("no")
+        db.slowloris_insert(50, 50, 30)
+        db.slow_read_insert(50, 50, 30, 1, 1, 5, 1, 512)
+
 
 def at_exit_funcs(app):
     @atexit.register
