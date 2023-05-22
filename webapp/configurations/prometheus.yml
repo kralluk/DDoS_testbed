@@ -7,4 +7,5 @@ scrape_configs:
 - job_name: apache
   scrape_interval: 5s
   static_configs:
-    - targets: ['apache_exporter:9117']
+    - targets:
+      - apache_exporter:9117
